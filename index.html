@@ -194,6 +194,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelines.html">Data Pipeline Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="airflow.html">Using frameguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kedro.html">Using frameguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/pyspark/schemas.html">Schemas</a></li>
@@ -330,12 +332,21 @@ designed to be backend-agnostic from the start.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">fg.schema_of</span></code> is precise: exact schema, exact stage.
 <code class="docutils literal notranslate"><span class="pre">fg.SparkSchema</span></code> is contractual: declare what you need upfront.</p>
+</section>
+<section id="real-pipeline-examples">
+<h2>Real pipeline examples<a class="headerlink" href="#real-pipeline-examples" title="Link to this heading">¶</a></h2>
+<p>See how frameguard integrates into production pipeline frameworks:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="airflow.html"><span class="doc">Using frameguard in Airflow</span></a> — validate at load time and at function boundaries in Airflow DAGs</p></li>
+<li><p><a class="reference internal" href="kedro.html"><span class="doc">Using frameguard in Kedro</span></a> — annotate Kedro nodes and let the catalog wire everything</p></li>
+</ul>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#defining-a-schema-type">Defining a schema type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#enforcement">Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#the-subset-parameter">The subset parameter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#multi-stage-pipeline">Multi-stage pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#schema-history">Schema history</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#sparkschema-utilities">SparkSchema utilities</a></li>
@@ -347,6 +358,27 @@ designed to be backend-agnostic from the start.</p>
 <li class="toctree-l2"><a class="reference internal" href="pipelines.html#kedro">Kedro</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipelines.html#airflow">Airflow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipelines.html#global-control">Global control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="airflow.html">Using frameguard in Airflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="airflow.html#file-structure">File structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="airflow.html#schemas-py">schemas.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="airflow.html#transforms-py">transforms.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="airflow.html#orders-dag-py">orders_dag.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="airflow.html#running-locally">Running locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="airflow.html#what-a-schema-error-looks-like">What a schema error looks like</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="kedro.html">Using frameguard in Kedro</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#file-structure">File structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#schemas-py">schemas.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#nodes-py">nodes.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#pipeline-py">pipeline.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#catalog-yml">catalog.yml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#running-the-pipeline">Running the pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#what-a-schema-error-looks-like">What a schema error looks like</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#where-to-define-schemas">Where to define schemas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kedro.html#using-fg-arm-instead-of-fg-enforce">Using fg.arm() instead of &#64;fg.enforce</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a><ul>
@@ -405,6 +437,7 @@ designed to be backend-agnostic from the start.</p>
             <ul>
 <li><a class="reference internal" href="#">frameguard</a><ul>
 <li><a class="reference internal" href="#two-ways-to-define-a-schema">Two ways to define a schema</a></li>
+<li><a class="reference internal" href="#real-pipeline-examples">Real pipeline examples</a></li>
 </ul>
 </li>
 </ul>
