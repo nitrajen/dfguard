@@ -1,9 +1,10 @@
 frameguard
 ==========
 
-PySpark schema errors fail at the worst possible time. A function receives
-the wrong DataFrame, Spark plans the job, serializes the query, ships work
-to executors, and then surfaces this:
+Schema errors in data pipelines fail at the worst possible time.
+
+A function receives the wrong DataFrame. The job starts: Spark plans the
+query, serializes it, ships work to executors, and then:
 
 .. code-block:: text
 
@@ -12,10 +13,8 @@ to executors, and then surfaces this:
      at org.apache.spark.sql.catalyst.analysis ...
      (47 more lines)
 
-By then the context is gone. The mismatch happened at the call site, before
-Spark touched anything.
-
-**frameguard raises there instead.**
+By then the context is gone. The mismatch happened at the function call,
+before Spark touched anything. **frameguard raises there instead.**
 
 .. code-block:: python
 
@@ -53,13 +52,19 @@ The wrong DataFrame simply cannot enter the wrong function.
 
 Zero extra dependencies. ``pip install frameguard[pyspark]`` installs only
 PySpark, which you already have. The enforcement is pure Python ``isinstance()``
-checks. Only your DataFrame arguments are validated — ``str``, ``int``, and
+checks. Only your DataFrame arguments are validated; ``str``, ``int``, and
 everything else passes through untouched.
+
+.. note::
+
+   frameguard currently supports **PySpark**. Support for additional DataFrame
+   libraries (pandas, polars, and others) is planned. The enforcement core is
+   designed to be backend-agnostic from the start.
 
 Two ways to define a schema
 ----------------------------
 
-**Capture from a live DataFrame** — exact matching, snapshot at each stage:
+**Capture from a live DataFrame** (exact matching, snapshot at each stage):
 
 .. code-block:: python
 
@@ -76,7 +81,7 @@ Two ways to define a schema
    RawSchema      = fg.schema_of(raw_df)
    EnrichedSchema = fg.schema_of(enriched_df)
 
-**Declare upfront** — no DataFrame required:
+**Declare upfront** (no DataFrame required):
 
 .. code-block:: python
 

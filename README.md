@@ -7,7 +7,7 @@
 [![Docs](https://img.shields.io/badge/docs-frameguard.readthedocs.io-blue)](https://frameguard.readthedocs.io)
 
 **Schema mismatches in data pipelines fail late.** A cryptic `AnalysisException` deep in
-Spark, or worse — silent bad data reaching production. By then you've lost the context of
+Spark, or worse, silent bad data reaching production. By then you've lost the context of
 what went wrong and where.
 
 **frameguard catches it at the source: the function call.**
@@ -33,7 +33,7 @@ def enrich(df: RawSchema):
     return df.withColumn("revenue", F.col("amount") * F.col("quantity"))
 
 enrich(raw_df)     # ✓ passes
-enrich(users_df)   # ✗ raises immediately — wrong schema
+enrich(users_df)   # ✗ raises immediately: wrong schema
 ```
 
 No validation logic inside the function. No waiting for Spark to plan the job.
@@ -41,7 +41,7 @@ The wrong DataFrame simply cannot enter the wrong function.
 
 > **Zero extra dependencies.** `pip install frameguard[pyspark]` installs only
 > PySpark, which you already have. Enforcement is pure Python `isinstance()`.
-> Only schema-annotated arguments are touched — `str`, `int`, and all other
+> Only schema-annotated arguments are touched; `str`, `int`, and all other
 > arguments pass through untouched.
 
 ---
@@ -70,7 +70,7 @@ raw_df = spark.createDataFrame(
 )
 enriched_df = raw_df.withColumn("revenue", F.col("amount") * F.col("quantity"))
 
-RawSchema      = fg.schema_of(raw_df)       # snapshot — exact match required
+RawSchema      = fg.schema_of(raw_df)       # snapshot, exact match required
 EnrichedSchema = fg.schema_of(enriched_df)  # new type after adding revenue
 ```
 
@@ -94,14 +94,14 @@ class EnrichedSchema(OrderSchema):        # inherits all parent fields
     revenue: T.DoubleType()
 ```
 
-Use `fg.SparkSchema` when you want to declare a contract upfront — Kedro nodes,
+Use `fg.SparkSchema` when you want to declare a contract upfront: Kedro nodes,
 shared schemas across a team. By default extra columns are allowed (`subset=True`).
 
 ---
 
 ## Enforcement
 
-### Packages — arm once, protect everywhere
+### Packages: arm once, protect everywhere
 
 ```python
 # my_pipeline/settings.py  (or __init__.py)
@@ -114,7 +114,7 @@ fg.arm(subset=False)    # exact match: no extra columns anywhere
 `fg.arm()` walks the entire package and wraps every annotated function.
 Node files need no imports or decorators.
 
-### Scripts and notebooks — per-function
+### Scripts and notebooks
 
 ```python
 import frameguard.pyspark as fg
@@ -145,7 +145,7 @@ def critical(df: RawSchema): ...
 | Function | `@fg.enforce(subset=True/False)` | inherits global |
 
 Function-level always wins. `subset=True` means extra columns are fine.
-`subset=False` means the DataFrame must match the schema exactly — no extra columns.
+`subset=False` means the DataFrame must match the schema exactly with no extra columns.
 
 ---
 
@@ -171,7 +171,7 @@ print(ds.schema_history)
 # [2] drop(['tags'])         - tags
 ```
 
-When `validate()` fails, the error includes the full history — you know exactly
+When `validate()` fails, the error includes the full history so you know exactly
 where the schema diverged from what the next stage expected.
 
 ---
@@ -181,10 +181,10 @@ where the schema diverged from what the next stage expected.
 Full docs at **[frameguard.readthedocs.io](https://frameguard.readthedocs.io)**,
 including:
 
-- [Quickstart](https://frameguard.readthedocs.io/en/latest/quickstart.html) — full walkthrough with nested structs and multi-stage pipelines
-- [Enforcement reference](https://frameguard.readthedocs.io/en/latest/api/pyspark/enforcement.html) — `arm()`, `enforce()`, `disable()`, `always`
-- [Schema utilities](https://frameguard.readthedocs.io/en/latest/api/pyspark/schemas.html) — `schema_of`, `SparkSchema`, `from_struct`, `to_code`
-- [Schema history](https://frameguard.readthedocs.io/en/latest/api/pyspark/history.html) — tracking mutations across pipeline stages
+- [Quickstart](https://frameguard.readthedocs.io/en/latest/quickstart.html): full walkthrough with nested structs and multi-stage pipelines
+- [Enforcement reference](https://frameguard.readthedocs.io/en/latest/api/pyspark/enforcement.html): `arm()`, `enforce()`, `disable()`, `always`
+- [Schema utilities](https://frameguard.readthedocs.io/en/latest/api/pyspark/schemas.html): `schema_of`, `SparkSchema`, `from_struct`, `to_code`
+- [Schema history](https://frameguard.readthedocs.io/en/latest/api/pyspark/history.html): tracking mutations across pipeline stages
 
 ---
 

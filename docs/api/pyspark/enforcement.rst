@@ -24,7 +24,7 @@ is enforced automatically.
 
    fg.arm()   # walks and arms the entire calling package
 
-Node files stay clean — no imports, no decorators needed:
+Node files stay clean with no imports or decorators needed:
 
 .. code-block:: python
 

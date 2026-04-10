@@ -86,7 +86,7 @@ Declare the schema as a class. No live DataFrame needed.
        ]),
    )
 
-   OrderSchema.assert_valid(order_df)   # passes — all declared fields present
+   OrderSchema.assert_valid(order_df)   # passes: all declared fields present
 
 .. note::
 
@@ -125,7 +125,7 @@ Enforcement
 Packages (Kedro, Airflow, any importable module)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Call ``fg.arm()`` once — from your entry point, ``settings.py``, or ``__init__.py``.
+Call ``fg.arm()`` once from your entry point, ``settings.py``, or ``__init__.py``.
 It walks the entire package and enforces every annotated function automatically.
 
 .. code-block:: python
@@ -135,7 +135,7 @@ It walks the entire package and enforces every annotated function automatically.
 
    fg.arm()   # arms every public function in the entire package
 
-Node files stay clean — no imports, no decorators:
+Node files stay clean with no imports or decorators:
 
 .. code-block:: python
 
