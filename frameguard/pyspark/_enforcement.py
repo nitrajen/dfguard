@@ -13,7 +13,10 @@ from typing import Any, TypeVar, overload
 
 F = TypeVar("F", bound=Callable[..., Any])
 
-_ENABLED = True  # global flag; disable() sets this to False
+_ENABLED = True   # fg.disable() / fg.enable_enforcement()
+_SUBSET  = True   # fg.arm(subset=...) — global default; function-level overrides this
+
+_UNSET = object()  # sentinel: "no function-level override, use global"
 
 
 def _is_schema_type(annotation: Any) -> bool:
@@ -28,13 +31,45 @@ def _is_schema_type(annotation: Any) -> bool:
         return False
 
 
-def _arm_module_dict(module_dict: dict[str, Any]) -> None:
+def _schema_matches(value: Any, annotation: type, subset: bool) -> bool:
+    """
+    Check whether *value* satisfies *annotation*.
+
+    For ``schema_of`` types the check is always exact (they are a snapshot).
+    For ``SparkSchema`` types the *subset* flag controls behaviour:
+
+    - ``subset=True``  — extra columns in *value* are fine.
+    - ``subset=False`` — *value* must have exactly the declared columns, nothing extra.
+    """
+    try:
+        from frameguard.pyspark.dataset import _TypedDatasetBase
+        from frameguard.pyspark.schema import SparkSchema
+
+        if issubclass(annotation, _TypedDatasetBase):
+            return isinstance(value, annotation)   # schema_of: always exact
+
+        if issubclass(annotation, SparkSchema):
+            if subset:
+                return isinstance(value, annotation)     # extra columns allowed
+            else:
+                errors = annotation.validate(value, strict=True)
+                return len(errors) == 0                  # exact match required
+
+    except Exception:
+        pass
+
+    return isinstance(value, annotation)
+
+
+def _arm_module_dict(module_dict: dict[str, Any], *, subset: Any) -> None:
     """Patch all public functions in a module's __dict__ with enforce()."""
     for name, obj in list(module_dict.items()):
         if name.startswith("_"):
             continue
         if isinstance(obj, types.FunctionType):
-            wrapped = enforce(obj)
+            # Pass _UNSET so each wrapped function reads _SUBSET at call-time,
+            # unless overridden at decoration time by the caller.
+            wrapped = enforce(obj, subset=subset)
             if wrapped is not obj:
                 module_dict[name] = wrapped
 
@@ -43,30 +78,34 @@ def arm(
     module: Any = None,
     *,
     package: str | None = None,
+    subset: bool = True,
 ) -> None:
     """
-    Enforce schema annotations for all public functions in the calling package.
+    Arm the entire calling package and set the global subset default.
 
-    Call once — typically in your entry point, ``settings.py``, or ``__init__.py``.
-    Every public function in every module of the package is enforced automatically::
+    Call once — typically in your entry point, ``settings.py``, or ``__init__.py``::
 
         import frameguard.pyspark as fg
-        fg.arm()
 
-    **Specific module object** — arm one module only::
+        fg.arm()                # subset=True (default): extra columns are fine
+        fg.arm(subset=False)    # exact match: no extra columns allowed anywhere
 
-        import my_pipeline.nodes as nodes_mod
-        fg.arm(nodes_mod)
+    The ``subset`` value becomes the global default. Individual functions decorated
+    with ``@fg.enforce(subset=...)`` override it for that function only.
 
-    **Explicit package name** — arm a package other than the calling one::
+    **Specific module object**::
+
+        fg.arm(my_module)
+
+    **Explicit package name**::
 
         fg.arm(package="my_pipeline.nodes")
-
-    Functions wrapped by ``arm()`` respect the global ``disable()`` flag but
-    not the ``always=True`` override (use ``@fg.enforce(always=True)`` for that).
     """
+    global _SUBSET
+    _SUBSET = subset
+
     if isinstance(module, types.ModuleType):
-        _arm_module_dict(vars(module))
+        _arm_module_dict(vars(module), subset=_UNSET)
         return
 
     if package is None:
@@ -85,13 +124,13 @@ def arm(
         return
 
     pkg = importlib.import_module(package)
-    _arm_module_dict(vars(pkg))
+    _arm_module_dict(vars(pkg), subset=_UNSET)
     pkg_path = getattr(pkg, "__path__", None)
     if pkg_path is not None:
         for _, mod_name, _ in pkgutil.walk_packages(pkg_path, prefix=package + "."):
             try:
                 mod = importlib.import_module(mod_name)
-                _arm_module_dict(vars(mod))
+                _arm_module_dict(vars(mod), subset=_UNSET)
             except Exception as exc:
                 warnings.warn(
                     f"frameguard: skipped arming module '{mod_name}': {exc}",
@@ -101,27 +140,16 @@ def arm(
 
 def disable() -> None:
     """
-    Disable all frameguard schema enforcement globally.
+    Disable all schema enforcement globally.
 
-    Every ``@enforce`` wrapper and every function wrapped by ``arm()`` becomes
-    a pass-through. Functions decorated with ``@enforce(always=True)`` are
-    **not** affected — they always enforce, regardless of this flag::
-
-        from frameguard.pyspark import disable, enable_enforcement
-
-        disable()
-        process(wrong_df)    # no error — enforcement is off
-        critical(wrong_df)   # still raises — @enforce(always=True) ignores disable()
-
-        enable_enforcement()
-        process(wrong_df)    # raises again
+    ``@fg.enforce(always=True)`` functions are not affected.
     """
     global _ENABLED
     _ENABLED = False
 
 
 def enable_enforcement() -> None:
-    """Re-enable enforcement after a ``disable()`` call."""
+    """Re-enable enforcement after a ``fg.disable()`` call."""
     global _ENABLED
     _ENABLED = True
 
@@ -130,39 +158,45 @@ def enable_enforcement() -> None:
 def enforce(func: F) -> F: ...
 
 @overload
-def enforce(func: None = None, *, always: bool = ...) -> Callable[[F], F]: ...
+def enforce(func: None = None, *, always: bool = ..., subset: bool = ...) -> Callable[[F], F]: ...
 
 
 def enforce(
     func: F | None = None,
     *,
     always: bool = False,
+    subset: Any = _UNSET,
 ) -> F | Callable[[F], F]:
     """
-    Validate schema annotations on DataFrame arguments only.
+    Validate schema annotations on DataFrame arguments.
 
-    Only intercepts parameters annotated with a ``schema_of`` type or a
-    ``SparkSchema`` subclass. All other arguments (``str``, ``int``, ``list``,
-    custom classes) are left completely alone.
+    Only intercepts parameters annotated with a ``fg.schema_of`` type or a
+    ``fg.SparkSchema`` subclass. All other arguments are left completely alone.
 
-    **Basic usage** — respects ``disable()``::
+    **Default** — inherits the global ``subset`` set by ``fg.arm()``::
 
-        @enforce
-        def enrich(df: RawSchema, label: str):
-            return df.withColumn("revenue", F.col("amount") * F.col("quantity"))
+        @fg.enforce
+        def process(df: OrderSchema, label: str): ...
 
-    **always=True** — enforces even after ``disable()`` is called. Use this
-    for functions where a schema mismatch would be genuinely dangerous, like
-    a function that writes to production or deletes data::
+    **subset=True** — extra columns in the DataFrame are fine (overrides global)::
 
-        @enforce(always=True)
-        def write_to_prod(df: FinalSchema, table: str):
-            df.write.saveAsTable(table)
+        @fg.enforce(subset=True)
+        def process(df: OrderSchema): ...
 
-        disable()            # turns off enforcement globally
-        enrich(wrong_df)     # passes silently
-        write_to_prod(wrong_df)  # still raises — always=True ignores disable()
+    **subset=False** — DataFrame must match the schema exactly (overrides global)::
+
+        @fg.enforce(subset=False)
+        def process(df: OrderSchema): ...
+
+    **always=True** — enforces even after ``fg.disable()`` is called::
+
+        @fg.enforce(always=True)
+        def write_to_prod(df: FinalSchema, table: str): ...
     """
+    # Capture the function-level subset at decoration time.
+    # If _UNSET, the wrapper reads _SUBSET at call-time (respects fg.arm changes).
+    subset_override = subset
+
     def decorator(f: F) -> F:
         params = inspect.signature(f).parameters
         schema_params = [
@@ -182,6 +216,9 @@ def enforce(
             if not _ENABLED and not always:
                 return f(*args, **kwargs)
 
+            # Function-level subset wins; fall back to global if not set.
+            effective_subset = _SUBSET if subset_override is _UNSET else subset_override
+
             bound = sig.bind(*args, **kwargs)
             bound.apply_defaults()
 
@@ -189,7 +226,7 @@ def enforce(
                 if param_name not in bound.arguments:
                     continue
                 value = bound.arguments[param_name]
-                if not isinstance(value, annotation):
+                if not _schema_matches(value, annotation, subset=effective_subset):
                     _raise_schema_mismatch(f.__name__, param_name, annotation, value)
 
             return f(*args, **kwargs)
