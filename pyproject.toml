@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "frameguard"
+version = "0.1.0"
+description = "Runtime schema enforcement for PySpark DataFrames"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "Nithin Rajendran" }]
+dependencies = []
+
+[project.optional-dependencies]
+pyspark = ["pyspark>=3.3.0"]
+pandas  = ["pandas>=1.5.0"]
+polars  = ["polars>=0.20.0"]
+all     = ["frameguard[pyspark,pandas,polars]"]
+dev     = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "ruff>=0.4.0",
+    "mypy>=1.9.0",
+    "pyspark>=3.3.0",
+]
+
+[project.urls]
+Homepage   = "https://github.com/nitrajen/frameguard"
+Repository = "https://github.com/nitrajen/frameguard"
+
+[tool.hatch.build.targets.wheel]
+packages = ["frameguard"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"frameguard/py.typed" = "frameguard/py.typed"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+# UP007 (X | Y for Optional) is suppressed where PySpark DataType instances are used:
+# DataType doesn't implement __or__, so Optional[X] is required there.
+[tool.ruff.lint.per-file-ignores]
+"frameguard/pyspark/schema.py" = ["UP007"]
+"tests/**/*.py"                = ["UP007"]
+
+[tool.mypy]
+python_version  = "3.10"
+strict          = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts   = "-v --tb=short"

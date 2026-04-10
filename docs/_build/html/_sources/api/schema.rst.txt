@@ -1,0 +1,7 @@
+SparkSchema
+===========
+
+.. autoclass:: dftypes.pyspark.schema.SparkSchema
+   :members:
+   :undoc-members:
+   :show-inheritance:
