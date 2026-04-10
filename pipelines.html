@@ -260,19 +260,16 @@ reach for in each case.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Enforce one function</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;enforce</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Enforce all functions in a file</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">arm()</span></code> at the bottom of the file</p></td>
+<tr class="row-odd"><td><p>Enforce an entire package from one place</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> in settings.py</p></td>
 </tr>
-<tr class="row-even"><td><p>Enforce an entire package from one place</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">arm(package=&quot;my_pipeline.nodes&quot;)</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Validate a DataFrame right after loading</p></td>
+<tr class="row-even"><td><p>Validate a DataFrame right after loading</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">MySchema.assert_valid(df)</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>Turn off enforcement in tests or CI</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">disable()</span></code> / <code class="docutils literal notranslate"><span class="pre">enable_enforcement()</span></code></p></td>
+<tr class="row-odd"><td><p>Turn off enforcement in tests or CI</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fg.disable()</span></code> / <code class="docutils literal notranslate"><span class="pre">fg.enable_enforcement()</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -281,27 +278,26 @@ reach for in each case.</p>
 <section id="one-thing-to-know-before-you-start">
 <h2>One thing to know before you start<a class="headerlink" href="#one-thing-to-know-before-you-start" title="Link to this heading">¶</a></h2>
 <p>In Kedro, DataFrames come from the catalog at runtime. You cannot call
-<code class="docutils literal notranslate"><span class="pre">schema_of(raw_df)</span></code> at module level because <code class="docutils literal notranslate"><span class="pre">raw_df</span></code> does not exist
-when the module is imported. <strong>Use SparkSchema for all Kedro nodes.</strong></p>
-<p><code class="docutils literal notranslate"><span class="pre">schema_of(df)</span></code> is still useful in scripts and notebooks where you have a
+<code class="docutils literal notranslate"><span class="pre">fg.schema_of(raw_df)</span></code> at module level because <code class="docutils literal notranslate"><span class="pre">raw_df</span></code> does not exist
+when the module is imported. <strong>Use fg.SparkSchema for all Kedro nodes.</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">fg.schema_of(df)</span></code> is still useful in scripts and notebooks where you have a
 live DataFrame in hand.</p>
 </section>
 <hr class="docutils" />
 <section id="kedro">
 <h2>Kedro<a class="headerlink" href="#kedro" title="Link to this heading">¶</a></h2>
-<p>The recommended structure is: <code class="docutils literal notranslate"><span class="pre">SparkSchema</span></code> for every node schema,
-<code class="docutils literal notranslate"><span class="pre">arm(package=...)</span></code> once in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>. That’s it. No decoration on
-individual functions, no <code class="docutils literal notranslate"><span class="pre">arm()</span></code> scattered across every file.</p>
+<p>The recommended structure is: <code class="docutils literal notranslate"><span class="pre">fg.SparkSchema</span></code> for every node schema,
+<code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> once in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>. No decoration on individual functions,
+no imports scattered across every node file.</p>
 <section id="define-schemas-and-nodes">
 <h3>Define schemas and nodes<a class="headerlink" href="#define-schemas-and-nodes" title="Link to this heading">¶</a></h3>
-<p>Schemas live alongside the functions that use them. Keep them in the same
-file or a shared <code class="docutils literal notranslate"><span class="pre">schemas.py</span></code> module — whichever reads better for your team.</p>
+<p>Schemas live alongside the functions that use them.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/nodes/raw_nodes.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSchema</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>      <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
     <span class="n">quantity</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">()</span>
@@ -317,8 +313,8 @@ file or a shared <code class="docutils literal notranslate"><span class="pre">sc
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/nodes/enrichment_nodes.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSchema</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">my_pipeline.nodes.raw_nodes</span><span class="w"> </span><span class="kn">import</span> <span class="n">RawOrderSchema</span>
 
 
@@ -337,18 +333,18 @@ file or a shared <code class="docutils literal notranslate"><span class="pre">sc
 </section>
 <section id="arm-everything-from-settings-py">
 <h3>Arm everything from settings.py<a class="headerlink" href="#arm-everything-from-settings-py" title="Link to this heading">¶</a></h3>
-<p>Kedro loads <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> before any pipeline runs. Put <code class="docutils literal notranslate"><span class="pre">arm</span></code> there and
-every node in the package gets enforced, with no changes to the node files.</p>
+<p>Kedro loads <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> before any pipeline runs. One call there and
+every node in the package is enforced, with no changes to the node files.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/settings.py</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">arm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 
-<span class="n">arm</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="s2">&quot;my_pipeline.nodes&quot;</span><span class="p">)</span>
+<span class="n">fg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>That single call walks every module under <code class="docutils literal notranslate"><span class="pre">my_pipeline.nodes</span></code>, finds every
-function with a schema annotation, and wraps it. Functions without schema
-annotations are left alone. Arguments that aren’t DataFrames (<code class="docutils literal notranslate"><span class="pre">str</span></code>,
-<code class="docutils literal notranslate"><span class="pre">int</span></code>, etc.) inside wrapped functions are also not touched.</p>
+<p>That single call walks every module in the package, finds every function
+with a schema annotation, and wraps it. Functions without schema annotations
+are left alone. Arguments that are not DataFrames (<code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, etc.)
+inside wrapped functions are also not touched.</p>
 </section>
 <section id="what-you-get">
 <h3>What you get<a class="headerlink" href="#what-you-get" title="Link to this heading">¶</a></h3>
@@ -356,10 +352,6 @@ annotations are left alone. Arguments that aren’t DataFrames (<code class="doc
 wrong DataFrame raises before any Spark work happens:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># raw_df has order_id, amount, quantity, customer_id</span>
 <span class="n">validate_orders</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>       <span class="c1"># OK</span>
-
-<span class="c1"># enriched_df has all raw fields + revenue</span>
-<span class="c1"># RawOrderSchema uses subset matching, so extra columns are fine</span>
-<span class="n">validate_orders</span><span class="p">(</span><span class="n">enriched_df</span><span class="p">)</span>  <span class="c1"># OK</span>
 
 <span class="c1"># raw_df is missing &#39;revenue&#39;, which EnrichedOrderSchema requires</span>
 <span class="n">flag_high_value</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
@@ -382,21 +374,21 @@ wrong DataFrame raises before any Spark work happens:</p>
 <p>Airflow tasks are Python callables. They receive paths or config, create a
 SparkSession inside, do the work, and write the result. DataFrames are never
 passed between tasks directly — only serializable values are.</p>
-<p>This means <code class="docutils literal notranslate"><span class="pre">&#64;enforce</span></code> on task functions doesn’t buy you much (the args are
+<p>This means <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on task functions doesn’t buy you much (the args are
 strings, not DataFrames). The useful tools are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">SparkSchema.assert_valid(df)</span></code> right after loading — catches schema drift
+<li><p><code class="docutils literal notranslate"><span class="pre">MySchema.assert_valid(df)</span></code> right after loading — catches schema drift
 from upstream the moment data enters your task, not halfway through processing</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&#64;enforce</span></code> on helper functions that the task calls internally</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on helper functions that the task calls internally</p></li>
 </ul>
 <section id="validate-after-loading">
 <h3>Validate after loading<a class="headerlink" href="#validate-after-loading" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_dag.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSchema</span><span class="p">,</span> <span class="n">enforce</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>      <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
     <span class="n">quantity</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">()</span>
@@ -407,13 +399,13 @@ from upstream the moment data enters your task, not halfway through processing</
     <span class="n">revenue</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
 
 
-<span class="nd">@enforce</span>
+<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_revenue</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">RawOrderSchema</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 
 
-<span class="nd">@enforce</span>
+<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">flag_vip</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">EnrichedOrderSchema</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;is_vip&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)</span>
@@ -426,11 +418,11 @@ from upstream the moment data enters your task, not halfway through processing</
     <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span>
 
     <span class="c1"># Validate right after loading. If upstream changed the schema,</span>
-    <span class="c1"># you find out here — not in a cryptic Spark error three steps later.</span>
+    <span class="c1"># you find out here, not in a cryptic Spark error three steps later.</span>
     <span class="n">RawOrderSchema</span><span class="o">.</span><span class="n">assert_valid</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
-    <span class="n">enriched</span> <span class="o">=</span> <span class="n">compute_revenue</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>   <span class="c1"># @enforce checks df&#39;s schema here</span>
-    <span class="n">flagged</span>  <span class="o">=</span> <span class="n">flag_vip</span><span class="p">(</span><span class="n">enriched</span><span class="p">)</span>    <span class="c1"># @enforce checks enriched&#39;s schema</span>
+    <span class="n">enriched</span> <span class="o">=</span> <span class="n">compute_revenue</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>   <span class="c1"># @fg.enforce checks df&#39;s schema here</span>
+    <span class="n">flagged</span>  <span class="o">=</span> <span class="n">flag_vip</span><span class="p">(</span><span class="n">enriched</span><span class="p">)</span>    <span class="c1"># @fg.enforce checks enriched&#39;s schema</span>
 
     <span class="n">flagged</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="s2">&quot;overwrite&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">output_path</span>
@@ -445,14 +437,14 @@ listing every missing or mismatched field.</p>
 <h2>Global control<a class="headerlink" href="#global-control" title="Link to this heading">¶</a></h2>
 <section id="turn-enforcement-off">
 <h3>Turn enforcement off<a class="headerlink" href="#turn-enforcement-off" title="Link to this heading">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">disable()</span></code> makes every <code class="docutils literal notranslate"><span class="pre">&#64;enforce</span></code> wrapper and every function wrapped by
-<code class="docutils literal notranslate"><span class="pre">arm()</span></code> a straight pass-through. Nothing is checked.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">disable</span><span class="p">,</span> <span class="n">enable_enforcement</span>
+<p><code class="docutils literal notranslate"><span class="pre">fg.disable()</span></code> makes every <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> wrapper and every function wrapped by
+<code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> a straight pass-through. Nothing is checked.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 
-<span class="n">disable</span><span class="p">()</span>
+<span class="n">fg</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
 <span class="n">process</span><span class="p">(</span><span class="n">completely_wrong_df</span><span class="p">)</span>   <span class="c1"># no error, runs normally</span>
 
-<span class="n">enable_enforcement</span><span class="p">()</span>
+<span class="n">fg</span><span class="o">.</span><span class="n">enable_enforcement</span><span class="p">()</span>
 <span class="n">process</span><span class="p">(</span><span class="n">completely_wrong_df</span><span class="p">)</span>   <span class="c1"># back to raising TypeError</span>
 </pre></div>
 </div>
@@ -464,10 +456,10 @@ of when or where the functions were imported.</p>
 <p>A clean way to disable enforcement without touching code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># somewhere at startup, e.g. conftest.py or settings.py</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">disable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;FRAMEGUARD_DISABLED&quot;</span><span class="p">):</span>
-    <span class="n">disable</span><span class="p">()</span>
+    <span class="n">fg</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Then in CI or non-production environments:</p>
@@ -481,16 +473,16 @@ of when or where the functions were imported.</p>
 <p>If you want most tests to run without schema enforcement (useful when you’re
 testing logic, not schemas), add this to <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">disable</span><span class="p">,</span> <span class="n">enable_enforcement</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">no_schema_enforcement</span><span class="p">():</span>
-    <span class="n">disable</span><span class="p">()</span>
+    <span class="n">fg</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
     <span class="k">yield</span>
-    <span class="n">enable_enforcement</span><span class="p">()</span>
+    <span class="n">fg</span><span class="o">.</span><span class="n">enable_enforcement</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Tests that specifically test enforcement can call <code class="docutils literal notranslate"><span class="pre">enable_enforcement()</span></code>
+<p>Tests that specifically test enforcement can call <code class="docutils literal notranslate"><span class="pre">fg.enable_enforcement()</span></code>
 at the start, or just remove the <code class="docutils literal notranslate"><span class="pre">autouse</span></code> and opt in explicitly.</p>
 </section>
 </section>

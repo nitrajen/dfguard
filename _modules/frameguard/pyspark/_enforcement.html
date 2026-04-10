@@ -287,61 +287,58 @@
     <span class="n">package</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enforce schema annotations for all public functions in the target module(s).</span>
+<span class="sd">    Enforce schema annotations for all public functions in the calling package.</span>
 
-<span class="sd">    Three modes:</span>
+<span class="sd">    Call once — typically in your entry point, ``settings.py``, or ``__init__.py``.</span>
+<span class="sd">    Every public function in every module of the package is enforced automatically::</span>
 
-<span class="sd">    **Calling module** (default): call at the bottom of a nodes file::</span>
+<span class="sd">        import frameguard.pyspark as fg</span>
+<span class="sd">        fg.arm()</span>
 
-<span class="sd">        arm()</span>
-
-<span class="sd">    **Specific module**::</span>
+<span class="sd">    **Specific module object** — arm one module only::</span>
 
 <span class="sd">        import my_pipeline.nodes as nodes_mod</span>
-<span class="sd">        arm(nodes_mod)</span>
+<span class="sd">        fg.arm(nodes_mod)</span>
 
-<span class="sd">    **Whole package** — recommended for Kedro and Airflow::</span>
+<span class="sd">    **Explicit package name** — arm a package other than the calling one::</span>
 
-<span class="sd">        arm(package=&quot;my_pipeline.nodes&quot;)</span>
+<span class="sd">        fg.arm(package=&quot;my_pipeline.nodes&quot;)</span>
 
 <span class="sd">    Functions wrapped by ``arm()`` respect the global ``disable()`` flag but</span>
-<span class="sd">    not the ``always=True`` override (use ``@enforce(always=True)`` for that).</span>
+<span class="sd">    not the ``always=True`` override (use ``@fg.enforce(always=True)`` for that).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">):</span>
         <span class="n">_arm_module_dict</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
         <span class="k">return</span>
 
-    <span class="k">if</span> <span class="n">package</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">pkg</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
-        <span class="n">_arm_module_dict</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">pkg</span><span class="p">))</span>
-        <span class="n">pkg_path</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;__path__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">pkg_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">mod_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">walk_packages</span><span class="p">(</span><span class="n">pkg_path</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">package</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">):</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod_name</span><span class="p">)</span>
-                    <span class="n">_arm_module_dict</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
-                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;frameguard: skipped arming module &#39;</span><span class="si">{</span><span class="n">mod_name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                        <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                    <span class="p">)</span>
-        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">package</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_back</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">caller_globals</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_back</span><span class="o">.</span><span class="n">f_globals</span>
+        <span class="n">package</span> <span class="o">=</span> <span class="n">caller_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__package__&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">caller_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
-    <span class="n">frame</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_back</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span>
-
-    <span class="n">caller_globals</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_back</span><span class="o">.</span><span class="n">f_globals</span>
-    <span class="n">pkg_name</span> <span class="o">=</span> <span class="n">caller_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__package__&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">caller_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">pkg_name</span> <span class="ow">or</span> <span class="n">pkg_name</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">package</span> <span class="ow">or</span> <span class="n">package</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;arm() called from __main__. Use @enforce on individual functions instead.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;frameguard.pyspark.arm() called from __main__. &quot;</span>
+            <span class="s2">&quot;Use @frameguard.pyspark.enforce on individual functions instead.&quot;</span><span class="p">,</span>
             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span>
 
-    <span class="n">_arm_module_dict</span><span class="p">(</span><span class="n">caller_globals</span><span class="p">)</span></div>
+    <span class="n">pkg</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+    <span class="n">_arm_module_dict</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">pkg</span><span class="p">))</span>
+    <span class="n">pkg_path</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span> <span class="s2">&quot;__path__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pkg_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">mod_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">walk_packages</span><span class="p">(</span><span class="n">pkg_path</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">package</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">mod_name</span><span class="p">)</span>
+                <span class="n">_arm_module_dict</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">mod</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;frameguard: skipped arming module &#39;</span><span class="si">{</span><span class="n">mod_name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="p">)</span></div>
 
 
 

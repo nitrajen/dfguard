@@ -246,8 +246,8 @@
         <article role="main" id="furo-main-content">
           <section id="schemas">
 <h1>Schemas<a class="headerlink" href="#schemas" title="Link to this heading">¶</a></h1>
-<p>There are two ways to define a schema. The right choice depends on what
-you have available and what kind of matching you need.</p>
+<p>There are two ways to define a schema. The right choice depends on whether
+you have a live DataFrame at definition time.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -257,14 +257,14 @@ you have available and what kind of matching you need.</p>
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">schema_of(df)</span></code></p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">SparkSchema</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">fg.schema_of(df)</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">fg.SparkSchema</span></code></p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><strong>Matching</strong></p></td>
-<td><p>Exact: same columns, same types, nothing extra</p></td>
-<td><p>Subset: df must have at least the declared fields</p></td>
+<tr class="row-even"><td><p><strong>Defined by</strong></p></td>
+<td><p>Inferred from a live DataFrame</p></td>
+<td><p>Declared upfront in code</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Needs a live DataFrame</strong></p></td>
 <td><p>Yes, snapshots the schema at that moment</p></td>
@@ -277,12 +277,12 @@ you have available and what kind of matching you need.</p>
 </tbody>
 </table>
 </div>
-<section id="schema-of">
-<h2>schema_of<a class="headerlink" href="#schema-of" title="Link to this heading">¶</a></h2>
+<section id="fg-schema-of">
+<h2>fg.schema_of<a class="headerlink" href="#fg-schema-of" title="Link to this heading">¶</a></h2>
 <p>Captures a live DataFrame’s schema as a Python type. Use it at each
 pipeline stage that changes the shape of the data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">schema_of</span><span class="p">,</span> <span class="n">enforce</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
 
 <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 <span class="n">raw_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
@@ -290,11 +290,11 @@ pipeline stage that changes the shape of the data.</p>
     <span class="s2">&quot;order_id LONG, amount DOUBLE, quantity INT&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">RawSchema</span>   <span class="o">=</span> <span class="n">schema_of</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
-<span class="n">enriched_df</span> <span class="o">=</span> <span class="n">raw_df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
-<span class="n">EnrichedSchema</span> <span class="o">=</span> <span class="n">schema_of</span><span class="p">(</span><span class="n">enriched_df</span><span class="p">)</span>   <span class="c1"># new type, includes revenue</span>
+<span class="n">RawSchema</span>      <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">schema_of</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
+<span class="n">enriched_df</span>    <span class="o">=</span> <span class="n">raw_df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
+<span class="n">EnrichedSchema</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">schema_of</span><span class="p">(</span><span class="n">enriched_df</span><span class="p">)</span>   <span class="c1"># new type, includes revenue</span>
 
-<span class="nd">@enforce</span>
+<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">RawSchema</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrichedSchema</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 
@@ -302,10 +302,10 @@ pipeline stage that changes the shape of the data.</p>
 <span class="n">enrich</span><span class="p">(</span><span class="n">enriched_df</span><span class="p">)</span>   <span class="c1"># raises: enriched_df has extra columns</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">schema_of</span></code> performs <strong>exact matching</strong>. A DataFrame with extra columns
-does not satisfy the contract. Capture a new type at each stage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RawSchema</span>      <span class="o">=</span> <span class="n">schema_of</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>        <span class="c1"># order_id, amount, quantity</span>
-<span class="n">EnrichedSchema</span> <span class="o">=</span> <span class="n">schema_of</span><span class="p">(</span><span class="n">enriched_df</span><span class="p">)</span>   <span class="c1"># order_id, amount, quantity, revenue</span>
+<p><code class="docutils literal notranslate"><span class="pre">fg.schema_of</span></code> does <strong>exact matching</strong>: same columns, same types, nothing extra.
+Capture a new type at each stage that changes the schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RawSchema</span>      <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">schema_of</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>        <span class="c1"># order_id, amount, quantity</span>
+<span class="n">EnrichedSchema</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">schema_of</span><span class="p">(</span><span class="n">enriched_df</span><span class="p">)</span>   <span class="c1"># order_id, amount, quantity, revenue</span>
 </pre></div>
 </div>
 <dl class="py function">
@@ -336,16 +336,14 @@ use as a type annotation:</p>
 </dd></dl>
 
 </section>
-<section id="sparkschema">
-<h2>SparkSchema<a class="headerlink" href="#sparkschema" title="Link to this heading">¶</a></h2>
-<p>Declare a schema as a class using real PySpark types. No live DataFrame
-needed. <code class="docutils literal notranslate"><span class="pre">SparkSchema</span></code> performs <strong>subset matching</strong>: the DataFrame must
-have at least every declared field, but extra columns are fine.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
+<section id="fg-sparkschema">
+<h2>fg.SparkSchema<a class="headerlink" href="#fg-sparkschema" title="Link to this heading">¶</a></h2>
+<p>Declare a schema as a class using real PySpark types. No live DataFrame needed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSchema</span><span class="p">,</span> <span class="n">enforce</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
     <span class="n">quantity</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">()</span>
@@ -354,11 +352,10 @@ have at least every declared field, but extra columns are fine.</p>
 <span class="k">class</span><span class="w"> </span><span class="nc">EnrichedSchema</span><span class="p">(</span><span class="n">OrderSchema</span><span class="p">):</span>       <span class="c1"># inherits all OrderSchema fields</span>
     <span class="n">revenue</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
 
-<span class="nd">@enforce</span>
+<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">OrderSchema</span><span class="p">):</span> <span class="o">...</span>
 
 <span class="c1"># A DataFrame with only order_id, amount, quantity, zip passes.</span>
-<span class="c1"># A DataFrame with those fields plus extras also passes.</span>
 <span class="c1"># A DataFrame missing order_id raises immediately.</span>
 </pre></div>
 </div>
@@ -565,11 +562,11 @@ When <code class="docutils literal notranslate"><span class="pre">strict=True</s
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Schemas</a><ul>
-<li><a class="reference internal" href="#schema-of">schema_of</a><ul>
+<li><a class="reference internal" href="#fg-schema-of">fg.schema_of</a><ul>
 <li><a class="reference internal" href="#frameguard.pyspark.dataset.schema_of"><code class="docutils literal notranslate"><span class="pre">schema_of()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#sparkschema">SparkSchema</a><ul>
+<li><a class="reference internal" href="#fg-sparkschema">fg.SparkSchema</a><ul>
 <li><a class="reference internal" href="#frameguard.pyspark.schema.SparkSchema"><code class="docutils literal notranslate"><span class="pre">SparkSchema</span></code></a><ul>
 <li><a class="reference internal" href="#frameguard.pyspark.schema.SparkSchema.to_struct"><code class="docutils literal notranslate"><span class="pre">SparkSchema.to_struct()</span></code></a></li>
 <li><a class="reference internal" href="#frameguard.pyspark.schema.SparkSchema.from_struct"><code class="docutils literal notranslate"><span class="pre">SparkSchema.from_struct()</span></code></a></li>
