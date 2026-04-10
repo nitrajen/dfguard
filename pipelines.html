@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="API Reference" href="api/index.html"><link rel="prev" title="Quickstart" href="quickstart.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Data Pipeline Usage - frameguard</title>
+        <title>Data Pipeline Usage - frameguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">frameguard</div></a>
+      <a href="index.html"><div class="brand">frameguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">frameguard</span>
+  <span class="sidebar-brand-text">frameguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -292,7 +292,7 @@ no imports scattered across every node file.</p>
 <section id="define-schemas-and-nodes">
 <h3>Define schemas and nodes<a class="headerlink" href="#define-schemas-and-nodes" title="Link to this heading">¶</a></h3>
 <p>Schemas live alongside the functions that use them.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/nodes/raw_nodes.py</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/nodes/raw_nodes.py  (enforced by fg.arm() in settings.py)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
@@ -440,12 +440,24 @@ listing every missing or mismatched field.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fg.disable()</span></code> makes every <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> wrapper and every function wrapped by
 <code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> a straight pass-through. Nothing is checked.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
+
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="n">wrong_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Alice&quot;</span><span class="p">)],</span> <span class="s2">&quot;user_id LONG, name STRING&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+    <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
+    <span class="n">amount</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
+
+<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">OrderSchema</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span>
 
 <span class="n">fg</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
-<span class="n">process</span><span class="p">(</span><span class="n">completely_wrong_df</span><span class="p">)</span>   <span class="c1"># no error, runs normally</span>
+<span class="n">process</span><span class="p">(</span><span class="n">wrong_df</span><span class="p">)</span>        <span class="c1"># no error — enforcement is off</span>
 
 <span class="n">fg</span><span class="o">.</span><span class="n">enable_enforcement</span><span class="p">()</span>
-<span class="n">process</span><span class="p">(</span><span class="n">completely_wrong_df</span><span class="p">)</span>   <span class="c1"># back to raising TypeError</span>
+<span class="n">process</span><span class="p">(</span><span class="n">wrong_df</span><span class="p">)</span>        <span class="c1"># raises TypeError again</span>
 </pre></div>
 </div>
 <p>The flag is global to the Python process. It affects everything, regardless

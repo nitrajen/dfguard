@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Schema History" href="history.html"><link rel="prev" title="Dataset" href="dataset.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Decorators - frameguard</title>
+        <title>Decorators - frameguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">frameguard</div></a>
+      <a href="../../index.html"><div class="brand">frameguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">frameguard</span>
+  <span class="sidebar-brand-text">frameguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -247,26 +247,33 @@
           <section id="decorators">
 <h1>Decorators<a class="headerlink" href="#decorators" title="Link to this heading">¶</a></h1>
 <p>These decorators attach schema validation explicitly to a function’s
-input or output, using <code class="docutils literal notranslate"><span class="pre">SparkSchema</span></code> classes you declare upfront.
-They are an alternative to the <code class="docutils literal notranslate"><span class="pre">&#64;enforce</span></code> + annotation approach,
+input or output, using <code class="docutils literal notranslate"><span class="pre">fg.SparkSchema</span></code> classes you declare upfront.
+They are an alternative to the <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> + annotation approach,
 useful when you want explicit validation logic that is separate from
 the type annotation.</p>
 <section id="check-schema">
 <h2>check_schema<a class="headerlink" href="#check-schema" title="Link to this heading">¶</a></h2>
 <p>Validates only the <strong>return value</strong>. Use this when the input does not
 need guarding but you want to guarantee the output shape.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSchema</span><span class="p">,</span> <span class="n">check_schema</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">EnrichedSchema</span><span class="p">(</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="n">raw_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+    <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mi">7</span><span class="p">)],</span>
+    <span class="s2">&quot;order_id LONG, amount DOUBLE, quantity INT&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EnrichedSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">revenue</span><span class="p">:</span>  <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
 
-<span class="nd">@check_schema</span><span class="p">(</span><span class="n">EnrichedSchema</span><span class="p">)</span>
+<span class="nd">@fg</span><span class="o">.</span><span class="n">check_schema</span><span class="p">(</span><span class="n">EnrichedSchema</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 
-<span class="c1"># If the returned DataFrame is missing &#39;revenue&#39;, raises SchemaValidationError.</span>
+<span class="n">enrich</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>   <span class="c1"># OK — returned DataFrame has order_id and revenue</span>
+<span class="c1"># If revenue were missing, raises SchemaValidationError.</span>
 </pre></div>
 </div>
 <dl class="py function">
@@ -294,20 +301,28 @@ guarantee the output shape.</p>
 <h2>typed_transform<a class="headerlink" href="#typed-transform" title="Link to this heading">¶</a></h2>
 <p>Validates both the <strong>input</strong> and the <strong>return value</strong>. Use this for
 functions at critical pipeline boundaries where both sides matter.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSchema</span><span class="p">,</span> <span class="n">typed_transform</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RawSchema</span><span class="p">(</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="n">raw_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+    <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mi">7</span><span class="p">)],</span>
+    <span class="s2">&quot;order_id LONG, amount DOUBLE, quantity INT&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RawSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
+    <span class="n">quantity</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">()</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">EnrichedSchema</span><span class="p">(</span><span class="n">RawSchema</span><span class="p">):</span>
     <span class="n">revenue</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
 
-<span class="nd">@typed_transform</span><span class="p">(</span><span class="n">input_schema</span><span class="o">=</span><span class="n">RawSchema</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="n">EnrichedSchema</span><span class="p">)</span>
+<span class="nd">@fg</span><span class="o">.</span><span class="n">typed_transform</span><span class="p">(</span><span class="n">input_schema</span><span class="o">=</span><span class="n">RawSchema</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="n">EnrichedSchema</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 
+<span class="n">enrich</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>   <span class="c1"># OK — input and output both validated</span>
 <span class="c1"># Wrong input schema raises on the way in.</span>
 <span class="c1"># Wrong output schema raises on the way out.</span>
 </pre></div>

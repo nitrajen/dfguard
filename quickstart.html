@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Data Pipeline Usage" href="pipelines.html"><link rel="prev" title="frameguard" href="index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Quickstart - frameguard</title>
+        <title>Quickstart - frameguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">frameguard</div></a>
+      <a href="index.html"><div class="brand">frameguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">frameguard</span>
+  <span class="sidebar-brand-text">frameguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -283,12 +283,17 @@ satisfy <code class="docutils literal notranslate"><span class="pre">RawSchema</
 <section id="fg-sparkschema-upfront-declaration">
 <h3>fg.SparkSchema: upfront declaration<a class="headerlink" href="#fg-sparkschema-upfront-declaration" title="Link to this heading">¶</a></h3>
 <p>Declare the schema as a class. No live DataFrame needed.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+
+<span class="c1"># Nested struct: AddressSchema is used as a field type inside OrderSchema</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">AddressSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">street</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">StringType</span><span class="p">()</span>
     <span class="n">city</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">StringType</span><span class="p">()</span>
-    <span class="nb">zip</span><span class="p">:</span>    <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="o">.</span><span class="n">StringType</span><span class="p">()]</span>   <span class="c1"># nullable: use Optional, not X | None</span>
+    <span class="nb">zip</span><span class="p">:</span>    <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="o">.</span><span class="n">StringType</span><span class="p">()]</span>   <span class="c1"># nullable field</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
@@ -297,6 +302,23 @@ satisfy <code class="docutils literal notranslate"><span class="pre">RawSchema</
 
 <span class="k">class</span><span class="w"> </span><span class="nc">EnrichedSchema</span><span class="p">(</span><span class="n">OrderSchema</span><span class="p">):</span>    <span class="c1"># inherits all OrderSchema fields</span>
     <span class="n">revenue</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
+
+<span class="c1"># Create a DataFrame that matches OrderSchema (including the nested address struct)</span>
+<span class="n">address_type</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">StructType</span><span class="p">([</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;street&quot;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">StringType</span><span class="p">()),</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;city&quot;</span><span class="p">,</span>   <span class="n">T</span><span class="o">.</span><span class="n">StringType</span><span class="p">()),</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;zip&quot;</span><span class="p">,</span>    <span class="n">T</span><span class="o">.</span><span class="n">StringType</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="n">order_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+    <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">99.0</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;123 Main St&quot;</span><span class="p">,</span> <span class="s2">&quot;Austin&quot;</span><span class="p">,</span> <span class="s2">&quot;78701&quot;</span><span class="p">))],</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">StructType</span><span class="p">([</span>
+        <span class="n">T</span><span class="o">.</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;order_id&quot;</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()),</span>
+        <span class="n">T</span><span class="o">.</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">,</span>   <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()),</span>
+        <span class="n">T</span><span class="o">.</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;address&quot;</span><span class="p">,</span>  <span class="n">address_type</span><span class="p">),</span>
+    <span class="p">]),</span>
+<span class="p">)</span>
+
+<span class="n">OrderSchema</span><span class="o">.</span><span class="n">assert_valid</span><span class="p">(</span><span class="n">order_df</span><span class="p">)</span>   <span class="c1"># passes — all declared fields present</span>
 </pre></div>
 </div>
 <div class="admonition note">

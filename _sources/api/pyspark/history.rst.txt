@@ -1,15 +1,22 @@
 Schema History
 ==============
 
-When you use ``dataset(df)``, every schema-changing operation is
+When you use ``fg.dataset(df)``, every schema-changing operation is
 recorded. ``schema_history`` gives you the full chain of transforms
 that produced the current DataFrame.
 
 .. code-block:: python
 
-   from frameguard.pyspark import dataset
+   import frameguard.pyspark as fg
+   from pyspark.sql import SparkSession, functions as F
 
-   ds = dataset(raw_df)
+   spark = SparkSession.builder.getOrCreate()
+   raw_df = spark.createDataFrame(
+       [(1, 10.0, 3, ["vip"])],
+       "order_id LONG, amount DOUBLE, quantity INT, tags ARRAY<STRING>",
+   )
+
+   ds = fg.dataset(raw_df)
    ds = ds.withColumn("revenue", F.col("amount") * F.col("quantity"))
    ds = ds.drop("tags")
 

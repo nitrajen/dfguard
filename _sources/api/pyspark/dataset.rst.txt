@@ -1,21 +1,27 @@
 Dataset
 =======
 
-``dataset(df)`` wraps a plain DataFrame in a tracked instance. Every
+``fg.dataset(df)`` wraps a plain DataFrame in a tracked instance. Every
 transform is recorded in ``schema_history``, so when validation fails
 you can see exactly where the schema diverged.
 
 .. code-block:: python
 
-   from pyspark.sql import functions as F
-   from frameguard.pyspark import dataset
+   import frameguard.pyspark as fg
+   from pyspark.sql import SparkSession, functions as F
 
-   ds = dataset(raw_df)
+   spark = SparkSession.builder.getOrCreate()
+   raw_df = spark.createDataFrame(
+       [(1, 10.0, 3, ["vip"], "10001")],
+       "order_id LONG, amount DOUBLE, quantity INT, tags ARRAY<STRING>, zip STRING",
+   )
+
+   ds = fg.dataset(raw_df)
    ds = ds.withColumn("revenue", F.col("amount") * F.col("quantity"))
    ds = ds.drop("tags")
 
    print(ds.schema_history)
-   # [0] input                  order_id:long, amount:double, quantity:int, tags:array<string>
+   # [0] input                  order_id:long, amount:double, quantity:int, tags:array<string>, zip:string
    # [1] withColumn('revenue')  + revenue:double
    # [2] drop(['tags'])         - tags
 
@@ -23,15 +29,25 @@ All standard DataFrame methods (``withColumn``, ``select``, ``drop``,
 ``filter``, ``join``, etc.) work normally. The tracked instance adds
 schema history on top.
 
-Validate against a schema at any point::
+Validate against a schema at any point:
 
-   from frameguard.pyspark import SparkSchema
-   from pyspark.sql import types as T
+.. code-block:: python
 
-   class OrderSchema(SparkSchema):
+   import frameguard.pyspark as fg
+   from pyspark.sql import SparkSession, functions as F, types as T
+
+   spark = SparkSession.builder.getOrCreate()
+   raw_df = spark.createDataFrame(
+       [(1, 10.0, 3)],
+       "order_id LONG, amount DOUBLE, quantity INT",
+   )
+
+   class OrderSchema(fg.SparkSchema):
        order_id: T.LongType()
        amount:   T.DoubleType()
 
+   ds = fg.dataset(raw_df)
+   ds = ds.withColumn("revenue", F.col("amount") * F.col("quantity"))
    ds.validate(OrderSchema)   # raises SchemaValidationError if columns are missing
 
 When ``validate`` fails, the error message includes the full history so
