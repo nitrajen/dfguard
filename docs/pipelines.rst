@@ -46,7 +46,7 @@ Schemas live alongside the functions that use them.
 
 .. code-block:: python
 
-   # my_pipeline/nodes/raw_nodes.py
+   # my_pipeline/nodes/raw_nodes.py  (enforced by fg.arm() in settings.py)
    import frameguard.pyspark as fg
    from pyspark.sql import functions as F, types as T
 
@@ -207,12 +207,24 @@ Turn enforcement off
 .. code-block:: python
 
    import frameguard.pyspark as fg
+   from pyspark.sql import SparkSession, types as T
+
+   spark = SparkSession.builder.getOrCreate()
+   wrong_df = spark.createDataFrame([(1, "Alice")], "user_id LONG, name STRING")
+
+   class OrderSchema(fg.SparkSchema):
+       order_id: T.LongType()
+       amount:   T.DoubleType()
+
+   @fg.enforce
+   def process(df: OrderSchema):
+       return df
 
    fg.disable()
-   process(completely_wrong_df)   # no error, runs normally
+   process(wrong_df)        # no error — enforcement is off
 
    fg.enable_enforcement()
-   process(completely_wrong_df)   # back to raising TypeError
+   process(wrong_df)        # raises TypeError again
 
 The flag is global to the Python process. It affects everything, regardless
 of when or where the functions were imported.

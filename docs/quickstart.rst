@@ -51,12 +51,17 @@ Declare the schema as a class. No live DataFrame needed.
 
 .. code-block:: python
 
+   import frameguard.pyspark as fg
+   from pyspark.sql import SparkSession, types as T
    from typing import Optional
 
+   spark = SparkSession.builder.getOrCreate()
+
+   # Nested struct: AddressSchema is used as a field type inside OrderSchema
    class AddressSchema(fg.SparkSchema):
        street: T.StringType()
        city:   T.StringType()
-       zip:    Optional[T.StringType()]   # nullable: use Optional, not X | None
+       zip:    Optional[T.StringType()]   # nullable field
 
    class OrderSchema(fg.SparkSchema):
        order_id: T.LongType()
@@ -65,6 +70,23 @@ Declare the schema as a class. No live DataFrame needed.
 
    class EnrichedSchema(OrderSchema):    # inherits all OrderSchema fields
        revenue: T.DoubleType()
+
+   # Create a DataFrame that matches OrderSchema (including the nested address struct)
+   address_type = T.StructType([
+       T.StructField("street", T.StringType()),
+       T.StructField("city",   T.StringType()),
+       T.StructField("zip",    T.StringType(), nullable=True),
+   ])
+   order_df = spark.createDataFrame(
+       [(1, 99.0, ("123 Main St", "Austin", "78701"))],
+       T.StructType([
+           T.StructField("order_id", T.LongType()),
+           T.StructField("amount",   T.DoubleType()),
+           T.StructField("address",  address_type),
+       ]),
+   )
+
+   OrderSchema.assert_valid(order_df)   # passes — all declared fields present
 
 .. note::
 
