@@ -246,18 +246,17 @@
         <article role="main" id="furo-main-content">
           <section id="frameguard">
 <h1>frameguard<a class="headerlink" href="#frameguard" title="Link to this heading">¶</a></h1>
-<p>PySpark schema errors fail at the worst possible time. A function receives
-the wrong DataFrame, Spark plans the job, serializes the query, ships work
-to executors, and then surfaces this:</p>
+<p>Schema errors in data pipelines fail at the worst possible time.</p>
+<p>A function receives the wrong DataFrame. The job starts: Spark plans the
+query, serializes it, ships work to executors, and then:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>AnalysisException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] &#39;revenue&#39; cannot be resolved.
 Did you mean one of: [order_id, amount, quantity, customer_id]?
   at org.apache.spark.sql.catalyst.analysis ...
   (47 more lines)
 </pre></div>
 </div>
-<p>By then the context is gone. The mismatch happened at the call site, before
-Spark touched anything.</p>
-<p><strong>frameguard raises there instead.</strong></p>
+<p>By then the context is gone. The mismatch happened at the function call,
+before Spark touched anything. <strong>frameguard raises there instead.</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
 
@@ -292,11 +291,17 @@ Spark touched anything.</p>
 The wrong DataFrame simply cannot enter the wrong function.</p>
 <p>Zero extra dependencies. <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">frameguard[pyspark]</span></code> installs only
 PySpark, which you already have. The enforcement is pure Python <code class="docutils literal notranslate"><span class="pre">isinstance()</span></code>
-checks. Only your DataFrame arguments are validated — <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, and
+checks. Only your DataFrame arguments are validated; <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, and
 everything else passes through untouched.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>frameguard currently supports <strong>PySpark</strong>. Support for additional DataFrame
+libraries (pandas, polars, and others) is planned. The enforcement core is
+designed to be backend-agnostic from the start.</p>
+</div>
 <section id="two-ways-to-define-a-schema">
 <h2>Two ways to define a schema<a class="headerlink" href="#two-ways-to-define-a-schema" title="Link to this heading">¶</a></h2>
-<p><strong>Capture from a live DataFrame</strong> — exact matching, snapshot at each stage:</p>
+<p><strong>Capture from a live DataFrame</strong> (exact matching, snapshot at each stage):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
 
@@ -311,7 +316,7 @@ everything else passes through untouched.</p>
 <span class="n">EnrichedSchema</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">schema_of</span><span class="p">(</span><span class="n">enriched_df</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Declare upfront</strong> — no DataFrame required:</p>
+<p><strong>Declare upfront</strong> (no DataFrame required):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 

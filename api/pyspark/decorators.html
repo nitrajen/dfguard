@@ -272,7 +272,7 @@ need guarding but you want to guarantee the output shape.</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 
-<span class="n">enrich</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>   <span class="c1"># OK — returned DataFrame has order_id and revenue</span>
+<span class="n">enrich</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>   <span class="c1"># OK: returned DataFrame has order_id and revenue</span>
 <span class="c1"># If revenue were missing, raises SchemaValidationError.</span>
 </pre></div>
 </div>
@@ -322,7 +322,7 @@ functions at critical pipeline boundaries where both sides matter.</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 
-<span class="n">enrich</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>   <span class="c1"># OK — input and output both validated</span>
+<span class="n">enrich</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>   <span class="c1"># OK: input and output both validated</span>
 <span class="c1"># Wrong input schema raises on the way in.</span>
 <span class="c1"># Wrong output schema raises on the way out.</span>
 </pre></div>

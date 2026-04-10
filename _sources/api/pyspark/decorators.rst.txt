@@ -32,7 +32,7 @@ need guarding but you want to guarantee the output shape.
    def enrich(df):
        return df.withColumn("revenue", F.col("amount") * F.col("quantity"))
 
-   enrich(raw_df)   # OK — returned DataFrame has order_id and revenue
+   enrich(raw_df)   # OK: returned DataFrame has order_id and revenue
    # If revenue were missing, raises SchemaValidationError.
 
 .. autofunction:: frameguard.pyspark.decorators.check_schema
@@ -68,7 +68,7 @@ functions at critical pipeline boundaries where both sides matter.
    def enrich(df):
        return df.withColumn("revenue", F.col("amount") * F.col("quantity"))
 
-   enrich(raw_df)   # OK — input and output both validated
+   enrich(raw_df)   # OK: input and output both validated
    # Wrong input schema raises on the way in.
    # Wrong output schema raises on the way out.
 

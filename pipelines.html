@@ -373,11 +373,11 @@ wrong DataFrame raises before any Spark work happens:</p>
 <h2>Airflow<a class="headerlink" href="#airflow" title="Link to this heading">¶</a></h2>
 <p>Airflow tasks are Python callables. They receive paths or config, create a
 SparkSession inside, do the work, and write the result. DataFrames are never
-passed between tasks directly — only serializable values are.</p>
+passed between tasks directly; only serializable values are.</p>
 <p>This means <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on task functions doesn’t buy you much (the args are
 strings, not DataFrames). The useful tools are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">MySchema.assert_valid(df)</span></code> right after loading — catches schema drift
+<li><p><code class="docutils literal notranslate"><span class="pre">MySchema.assert_valid(df)</span></code> right after loading, which catches schema drift
 from upstream the moment data enters your task, not halfway through processing</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on helper functions that the task calls internally</p></li>
 </ul>
@@ -454,7 +454,7 @@ listing every missing or mismatched field.</p>
     <span class="k">return</span> <span class="n">df</span>
 
 <span class="n">fg</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
-<span class="n">process</span><span class="p">(</span><span class="n">wrong_df</span><span class="p">)</span>        <span class="c1"># no error — enforcement is off</span>
+<span class="n">process</span><span class="p">(</span><span class="n">wrong_df</span><span class="p">)</span>        <span class="c1"># no error, enforcement is off</span>
 
 <span class="n">fg</span><span class="o">.</span><span class="n">enable_enforcement</span><span class="p">()</span>
 <span class="n">process</span><span class="p">(</span><span class="n">wrong_df</span><span class="p">)</span>        <span class="c1"># raises TypeError again</span>

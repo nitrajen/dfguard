@@ -132,12 +132,12 @@ Airflow
 
 Airflow tasks are Python callables. They receive paths or config, create a
 SparkSession inside, do the work, and write the result. DataFrames are never
-passed between tasks directly — only serializable values are.
+passed between tasks directly; only serializable values are.
 
 This means ``@fg.enforce`` on task functions doesn't buy you much (the args are
 strings, not DataFrames). The useful tools are:
 
-- ``MySchema.assert_valid(df)`` right after loading — catches schema drift
+- ``MySchema.assert_valid(df)`` right after loading, which catches schema drift
   from upstream the moment data enters your task, not halfway through processing
 - ``@fg.enforce`` on helper functions that the task calls internally
 
@@ -221,7 +221,7 @@ Turn enforcement off
        return df
 
    fg.disable()
-   process(wrong_df)        # no error — enforcement is off
+   process(wrong_df)        # no error, enforcement is off
 
    fg.enable_enforcement()
    process(wrong_df)        # raises TypeError again
