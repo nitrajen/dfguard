@@ -26,8 +26,9 @@ dev     = [
 ]
 
 [project.urls]
-Homepage   = "https://github.com/nitrajen/dfguard"
-Repository = "https://github.com/nitrajen/dfguard"
+Homepage      = "https://github.com/nitrajen/dfguard"
+Repository    = "https://github.com/nitrajen/dfguard"
+Documentation = "https://nitrajen.github.io/dfguard/"
 
 [tool.hatch.build.targets.wheel]
 packages = ["dfguard"]

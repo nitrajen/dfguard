@@ -9,9 +9,9 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![CI](https://github.com/nitrajen/dfguard/actions/workflows/ci.yml/badge.svg)](https://github.com/nitrajen/dfguard/actions)
 [![Coverage](https://codecov.io/gh/nitrajen/dfguard/branch/main/graph/badge.svg)](https://codecov.io/gh/nitrajen/dfguard)
-[![Docs](https://img.shields.io/badge/docs-dfguard.readthedocs.io-blue)](https://dfguard.readthedocs.io)
+[![Docs](https://img.shields.io/badge/docs-nitrajen.github.io/dfguard-blue)](https://nitrajen.github.io/dfguard/)
 
-**[Documentation](https://dfguard.readthedocs.io)** | [Quickstart](https://dfguard.readthedocs.io/en/latest/quickstart.html) | [API Reference](https://dfguard.readthedocs.io/en/latest/api/index.html)
+**[Documentation](https://nitrajen.github.io/dfguard/)** | [Quickstart](https://nitrajen.github.io/dfguard/quickstart.html) | [API Reference](https://nitrajen.github.io/dfguard/api/index.html)
 
 </div>
 
@@ -220,19 +220,19 @@ ds.schema_history.print()
 
 dfguard fits naturally into pipeline frameworks. See the full docs for working examples with runnable code:
 
-- **[Airflow](https://dfguard.readthedocs.io/en/latest/airflow.html)**: `dfg.arm()` globally, `assert_valid` after loading from storage, `@dfg.enforce(subset=False)` on functions that write to fixed-schema sinks
-- **[Kedro](https://dfguard.readthedocs.io/en/latest/kedro.html)**: `dfg.arm()` in `settings.py`, node functions need no decorators
+- **[Airflow](https://nitrajen.github.io/dfguard/airflow.html)**: `dfg.arm()` globally, `assert_valid` after loading from storage, `@dfg.enforce(subset=False)` on functions that write to fixed-schema sinks
+- **[Kedro](https://nitrajen.github.io/dfguard/kedro.html)**: `dfg.arm()` in `settings.py`, node functions need no decorators
 
 ---
 
 ## Documentation
 
-**[dfguard.readthedocs.io](https://dfguard.readthedocs.io)**
+**[nitrajen.github.io/dfguard](https://nitrajen.github.io/dfguard/)**
 
-- [Quickstart](https://dfguard.readthedocs.io/en/latest/quickstart.html): nested structs, multi-stage pipelines, subset flag, schema history
-- [API reference](https://dfguard.readthedocs.io/en/latest/api/index.html): `arm`, `disarm`, `enforce`, `schema_of`, `SparkSchema`, `dataset`
-- [Airflow integration](https://dfguard.readthedocs.io/en/latest/airflow.html)
-- [Kedro integration](https://dfguard.readthedocs.io/en/latest/kedro.html)
+- [Quickstart](https://nitrajen.github.io/dfguard/quickstart.html): nested structs, multi-stage pipelines, subset flag, schema history
+- [API reference](https://nitrajen.github.io/dfguard/api/index.html): `arm`, `disarm`, `enforce`, `schema_of`, `SparkSchema`, `dataset`
+- [Airflow integration](https://nitrajen.github.io/dfguard/airflow.html)
+- [Kedro integration](https://nitrajen.github.io/dfguard/kedro.html)
 
 ---
 

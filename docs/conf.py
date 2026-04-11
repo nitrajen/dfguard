@@ -8,6 +8,7 @@
 
 import os
 import sys
+import datetime
 
 import tomllib
 
@@ -21,7 +22,7 @@ _default_authors = [{"name": "dfguard contributors"}]
 author    = ", ".join(a["name"] for a in _meta.get("authors", _default_authors))
 release   = _meta["version"]   # e.g. "0.1.0"
 version   = ".".join(release.split(".")[:2])  # e.g. "0.1"
-copyright = f"2024, {author}"
+copyright = f"{datetime.date.today().year}, {author}"
 
 extensions = [
     "sphinx.ext.autodoc",
