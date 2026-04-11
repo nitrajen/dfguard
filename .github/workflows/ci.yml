@@ -41,8 +41,7 @@ jobs:
         with:
           files: coverage.xml
           fail_ci_if_error: false
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   # Test against the newest Python release.
   # Allowed to fail: PySpark may not support it yet.
