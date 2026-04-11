@@ -1,5 +1,5 @@
 """
-Tests for frameguard.pyspark.coercion — pure-Python type coercion rules.
+Tests for frameguard.pyspark.coercion: pure-Python type coercion rules.
 
 Each test verifies our result_type() against what Spark's Catalyst actually
 produces, confirming frameguard can resolve derived column types without Spark.
@@ -89,7 +89,7 @@ def test_mul_matches_spark(spark, left, right, expected):
 
 
 # ---------------------------------------------------------------------------
-# Division  a / b  — always Double
+# Division  a / b: always Double
 # ---------------------------------------------------------------------------
 
 @pytest.mark.parametrize("left, right", [
@@ -106,7 +106,7 @@ def test_div_always_double(spark, left, right):
 
 
 # ---------------------------------------------------------------------------
-# Comparison  a > b  — always Boolean
+# Comparison  a > b: always Boolean
 # ---------------------------------------------------------------------------
 
 @pytest.mark.parametrize("left, right", [
@@ -122,7 +122,7 @@ def test_comparison_always_boolean(spark, left, right):
 
 
 # ---------------------------------------------------------------------------
-# Symmetry — a op b == b op a
+# Symmetry: a op b == b op a
 # ---------------------------------------------------------------------------
 
 @pytest.mark.parametrize("op", ["+", "*"])

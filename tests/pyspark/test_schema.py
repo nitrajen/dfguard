@@ -110,7 +110,7 @@ def test_sparkschema_as_enforce_annotation(spark):
     # Enriched DataFrame (extra column) also satisfies OrderSchema
     extra = T.StructType(OrderSchema.to_struct().fields + [T.StructField("rev", T.DoubleType())])
     enriched_df = spark.createDataFrame([], extra)
-    process(enriched_df)   # must not raise — subset matching
+    process(enriched_df)   # must not raise: subset matching
 
     # Wrong schema raises
     wrong_df = spark.createDataFrame([], T.StructType([T.StructField("x", T.StringType())]))

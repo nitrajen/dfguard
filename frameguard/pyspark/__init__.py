@@ -1,5 +1,5 @@
 """
-frameguard.pyspark — runtime schema enforcement for PySpark DataFrames.
+frameguard.pyspark: runtime schema enforcement for PySpark DataFrames.
 
 Two-line setup for packages (Kedro, Airflow, any importable module)
 -------------------------------------------------------------------

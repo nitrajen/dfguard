@@ -41,7 +41,7 @@ def test_schema_of_exact_rejects_enriched(spark):
 
 
 def test_sparkschema_subset_accepts_enriched(spark):
-    """SparkSchema annotation uses subset matching — extra columns are OK."""
+    """SparkSchema annotation uses subset matching: extra columns are OK."""
     @enforce
     def stage1(df: RawSchema): ...
 
@@ -55,7 +55,7 @@ def test_sparkschema_subset_accepts_enriched(spark):
     enriched = raw.withColumn("revenue", F.col("amount") * 2)
 
     stage1(raw)       # ok
-    stage1(enriched)  # ok — subset match, extra column is fine
+    stage1(enriched)  # ok: subset match, extra column is fine
 
 
 def test_sparkschema_rejects_missing_field(spark):
@@ -105,10 +105,10 @@ def test_schema_of_and_sparkschema_interoperable(spark):
     RawType = schema_of(raw)
 
     @enforce
-    def validate_input(df: RawSchema): ...    # structural — SparkSchema
+    def validate_input(df: RawSchema): ...    # structural: SparkSchema
 
     @enforce
-    def enrich(df: RawType):                  # exact — schema_of snapshot
+    def enrich(df: RawType):                  # exact: schema_of snapshot
         return df.withColumn("revenue", F.col("amount") * 2)
 
     validate_input(raw)

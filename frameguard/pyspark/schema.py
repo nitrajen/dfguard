@@ -1,4 +1,4 @@
-"""SparkSchema — declare a DataFrame's expected shape as a Python class."""
+"""SparkSchema: declare a DataFrame's expected shape as a Python class."""
 
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ class _SparkSchemaMeta(type):
 
         Returns True when ``instance`` (a DataFrame or dataset wrapper) has
         at least every field declared in ``cls``, with matching types.
-        Extra columns are allowed — SparkSchema expresses a contract, not an
+        Extra columns are allowed. SparkSchema expresses a contract, not an
         exact snapshot.
         """
         schema = getattr(instance, "schema", None)
@@ -102,13 +102,13 @@ class SparkSchema(metaclass=_SparkSchemaMeta):
     @classmethod
     def _fg_check(cls, value: Any, subset: bool) -> bool:
         """
-        Enforcement protocol hook — called by ``@fg.enforce`` at runtime.
+        Enforcement protocol hook called by ``@fg.enforce`` at runtime.
 
         Any class that exposes this method participates in frameguard enforcement
         automatically. New DataFrame backends just add this to their schema type.
 
-        - ``subset=True``  — extra columns in *value* are fine (default).
-        - ``subset=False`` — *value* must have exactly the declared columns, nothing extra.
+        - ``subset=True``: extra columns in *value* are fine (default).
+        - ``subset=False``: *value* must have exactly the declared columns, nothing extra.
         """
         if subset:
             return isinstance(value, cls)  # extra columns fine
@@ -123,21 +123,6 @@ class SparkSchema(metaclass=_SparkSchemaMeta):
         actual_names   = {f.name for f in schema.fields}
         declared_names = {f.name for f in cls.to_struct().fields}
         return actual_names == declared_names
-
-    @classmethod
-    def create_dataframe(cls, spark: Any, data: Any) -> Any:
-        """Create a Spark DataFrame from *data* using this schema as the ``StructType``.
-
-        Shorthand for ``spark.createDataFrame(data, MySchema.to_struct())``.
-        Useful in tests and scripts to build typed sample data without repeating
-        the schema definition::
-
-            raw = RawOrderSchema.create_dataframe(spark, [
-                (1, 101, 50.0, 3, "confirmed"),
-                (2, 102, 200.0, 5, "pending"),
-            ])
-        """
-        return spark.createDataFrame(data, cls.to_struct())
 
     @classmethod
     def to_struct(cls) -> Any:
@@ -293,7 +278,7 @@ def _compare_structs(
 
         if type(exp_field.dataType) is not type(act_field.dataType):
             errors.append(_SchemaError(
-                f"Column '{col_path}': type mismatch — "
+                f"Column '{col_path}': type mismatch: "
                 f"expected {exp_field.dataType.simpleString()}, "
                 f"got {act_field.dataType.simpleString()}"
             ))
@@ -311,14 +296,14 @@ def _compare_structs(
             ))
         elif exp_field.dataType != act_field.dataType:
             errors.append(_SchemaError(
-                f"Column '{col_path}': type mismatch — "
+                f"Column '{col_path}': type mismatch: "
                 f"expected {exp_field.dataType.simpleString()}, "
                 f"got {act_field.dataType.simpleString()}"
             ))
 
         if strict and exp_field.nullable != act_field.nullable:
             errors.append(_SchemaError(
-                f"Column '{col_path}': nullable mismatch — "
+                f"Column '{col_path}': nullable mismatch: "
                 f"expected nullable={exp_field.nullable}, got nullable={act_field.nullable}"
             ))
 
@@ -385,7 +370,7 @@ def _spark_type_to_annotation(
     """
     Recursively convert a Spark DataType to a Python annotation.
 
-    Primitive and complex types are returned as DataType *instances* — exactly
+    Primitive and complex types are returned as DataType *instances*, exactly
     what users would write themselves (e.g. ``T.LongType()``, ``T.ArrayType(T.StringType())``).
     Nested StructTypes are converted to SparkSchema subclasses so the round-trip
     preserves the class-based API.

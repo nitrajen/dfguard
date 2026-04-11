@@ -1,6 +1,6 @@
 """Annotation-to-Spark conversion utilities.
 
-No custom type aliases — use pyspark.sql.types directly.
+No custom type aliases. Use pyspark.sql.types directly.
 """
 
 from __future__ import annotations
@@ -46,7 +46,7 @@ def annotation_to_spark(annotation: Any) -> tuple[Any, bool]:
             f"got: {annotation}"
         )
 
-    # Already a DataType instance — use as-is
+    # Already a DataType instance, use as-is
     if isinstance(annotation, T.DataType):
         result = annotation, False
         try:
@@ -55,7 +55,7 @@ def annotation_to_spark(annotation: Any) -> tuple[Any, bool]:
             pass
         return result
 
-    # A DataType subclass (e.g. LongType, not LongType()) — instantiate
+    # A DataType subclass (e.g. LongType, not LongType()) -- instantiate
     if isinstance(annotation, type) and issubclass(annotation, T.DataType):
         result = annotation(), False
         _ANNOTATION_CACHE[annotation] = result

@@ -1,4 +1,4 @@
-"""Immutable schema evolution log. Stores only StructType metadata — never DataFrame data."""
+"""Immutable schema evolution log. Stores only StructType metadata, never DataFrame data."""
 
 from __future__ import annotations
 

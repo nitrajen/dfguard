@@ -109,7 +109,7 @@ def test_select_with_derived_column(order_ds):
     assert f.dataType == T.DoubleType()
 
 
-# --- filter / orderBy / distinct — schema preserved ---
+# --- filter / orderBy / distinct: schema preserved ---
 
 def test_schema_preserving_ops(order_ds):
     for ds in [

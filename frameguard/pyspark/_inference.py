@@ -1,7 +1,7 @@
 """
 frameguard.pyspark._inference
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-``infer_schema(df)`` — inspect a live DataFrame and generate a SparkSchema
+``infer_schema(df)``: inspect a live DataFrame and generate a SparkSchema
 subclass with the correct types, including deeply nested structs.
 
 The generated class can immediately be used for validation::

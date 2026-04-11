@@ -14,7 +14,7 @@ from typing import Any, TypeVar, overload
 F = TypeVar("F", bound=Callable[..., Any])
 
 _ENABLED = True   # fg.disable() / fg.enable_enforcement()
-_SUBSET  = True   # fg.arm(subset=...) — global default; function-level overrides this
+_SUBSET  = True   # fg.arm(subset=...) sets the global default; function-level overrides this
 
 _UNSET = object()  # sentinel: "no function-level override, use global"
 
@@ -26,7 +26,7 @@ def _is_schema_type(annotation: Any) -> bool:
     Any class that exposes a ``_fg_check(value, subset) -> bool`` classmethod
     is treated as a schema type. This is the extension point: new DataFrame
     backends (pandas, polars, …) just need to add ``_fg_check`` to their
-    schema class — no changes to enforcement code required.
+    schema class; no changes to enforcement code required.
     """
     return isinstance(annotation, type) and callable(getattr(annotation, "_fg_check", None))
 
@@ -38,14 +38,14 @@ def _schema_matches(value: Any, annotation: type, subset: bool) -> bool:
     Delegates to ``annotation._fg_check(value, subset)`` when available.
     The meaning of *subset* is left to each schema type:
 
-    - ``schema_of`` types (``_TypedDatasetBase``) ignore *subset* — always exact.
+    - ``schema_of`` types (``_TypedDatasetBase``) ignore *subset*: always exact.
     - ``SparkSchema`` types respect *subset*:
-        - ``True``  — extra columns in *value* are fine.
-        - ``False`` — *value* must have exactly the declared columns, nothing extra.
+        - ``True``: extra columns in *value* are fine.
+        - ``False``: *value* must have exactly the declared columns, nothing extra.
     """
     checker = getattr(annotation, "_fg_check", None)
     if callable(checker):
-        return checker(value, subset)
+        return bool(checker(value, subset))
     return isinstance(value, annotation)
 
 
@@ -57,7 +57,7 @@ def _arm_module_dict(module_dict: dict[str, Any], *, subset: Any) -> None:
         if isinstance(obj, types.FunctionType):
             # Pass _UNSET so each wrapped function reads _SUBSET at call-time,
             # unless overridden at decoration time by the caller.
-            wrapped = enforce(obj, subset=subset)
+            wrapped = enforce(subset=subset)(obj)
             if wrapped is not obj:
                 module_dict[name] = wrapped
 
@@ -71,7 +71,7 @@ def arm(
     """
     Arm the entire calling package and set the global subset default.
 
-    Call once — typically in your entry point, ``settings.py``, or ``__init__.py``::
+    Call once from your entry point, ``__init__.py``, or ``settings.py`` (Kedro)::
 
         import frameguard.pyspark as fg
 
@@ -161,22 +161,22 @@ def enforce(
     Only intercepts parameters annotated with a ``fg.schema_of`` type or a
     ``fg.SparkSchema`` subclass. All other arguments are left completely alone.
 
-    **Default** — inherits the global ``subset`` set by ``fg.arm()``::
+    **Default**: inherits the global ``subset`` set by ``fg.arm()``:
 
         @fg.enforce
         def process(df: OrderSchema, label: str): ...
 
-    **subset=True** — extra columns in the DataFrame are fine (overrides global)::
+    **subset=True**: extra columns in the DataFrame are fine (overrides global)::
 
         @fg.enforce(subset=True)
         def process(df: OrderSchema): ...
 
-    **subset=False** — DataFrame must match the schema exactly (overrides global)::
+    **subset=False**: DataFrame must match the schema exactly (overrides global)::
 
         @fg.enforce(subset=False)
         def process(df: OrderSchema): ...
 
-    **always=True** — enforces even after ``fg.disable()`` is called::
+    **always=True**: enforces even after ``fg.disable()`` is called::
 
         @fg.enforce(always=True)
         def write_to_prod(df: FinalSchema, table: str): ...

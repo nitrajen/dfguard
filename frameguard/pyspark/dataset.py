@@ -1,5 +1,5 @@
 """
-frameguard.pyspark.dataset — schema-as-type for PySpark DataFrames.
+frameguard.pyspark.dataset: schema-as-type for PySpark DataFrames.
 
 ``schema_of(df)`` captures a DataFrame's schema as a Python class.
 Use that class as a type annotation and beartype enforces it at every call.
@@ -13,7 +13,7 @@ Use that class as a type annotation and beartype enforces it at every call.
     def enrich(df: RawSchema) -> RichSchema:   # wrong schema → error at call site
         return df.withColumn("revenue", F.col("amount") * F.col("quantity"))
 
-The returned class is a real Python class — isinstance(df, RawSchema) works,
+The returned class is a real Python class (isinstance(df, RawSchema) works,
 and it integrates naturally with beartype, mypy stubs, and your own tooling.
 
 For mutation tracking use ``dataset(df)`` (aliased as ``_make_dataset``):
@@ -33,7 +33,7 @@ from frameguard.pyspark.exceptions import SchemaValidationError
 from frameguard.pyspark.history import SchemaChange, SchemaHistory
 
 # ---------------------------------------------------------------------------
-# Metaclass — enables structural isinstance checks based on schema
+# Metaclass: enables structural isinstance checks based on schema
 # ---------------------------------------------------------------------------
 
 class _TypedDatasetMeta(type):
@@ -58,7 +58,7 @@ class _TypedDatasetMeta(type):
             return True
 
         # Exact match: same column names AND same types, no extras allowed.
-        # A DataFrame with extra columns does NOT satisfy the contract —
+        # A DataFrame with extra columns does NOT satisfy the contract;
         # use DT2 = schema_of(enriched_df) to capture the new schema.
         actual   = {f.name: f.dataType for f in instance.schema.fields}
         expected_ = {f.name: f.dataType for f in expected.fields}
@@ -66,7 +66,7 @@ class _TypedDatasetMeta(type):
 
 
 # ---------------------------------------------------------------------------
-# Base implementation — all methods live here
+# Base implementation: all methods live here
 # ---------------------------------------------------------------------------
 
 class _TypedDatasetBase(metaclass=_TypedDatasetMeta):
@@ -82,7 +82,7 @@ class _TypedDatasetBase(metaclass=_TypedDatasetMeta):
 
     @classmethod
     def _fg_check(cls, value: Any, subset: bool) -> bool:
-        """Enforcement protocol hook — schema_of types are always exact."""
+        """Enforcement protocol hook: schema_of types are always exact."""
         return isinstance(value, cls)  # exact: extra columns fail
 
     _df:      Any
@@ -127,7 +127,7 @@ class _TypedDatasetBase(metaclass=_TypedDatasetMeta):
         object.__setattr__(self, "_history", history or SchemaHistory.initial(raw.schema))
 
     # ------------------------------------------------------------------
-    # Internal factory — every operation calls this
+    # Internal factory: every operation calls this
     # ------------------------------------------------------------------
 
     def _wrap(self, new_df: Any, operation: str) -> _TypedDatasetBase:
@@ -443,7 +443,7 @@ class _TypedDatasetBase(metaclass=_TypedDatasetMeta):
         return self
 
     # ------------------------------------------------------------------
-    # Validation via call — DT(other_df) checks schema then wraps
+    # Validation via call: DT(other_df) checks schema then wraps
     # ------------------------------------------------------------------
 
     def __call__(self, df: Any) -> _TypedDatasetBase:
@@ -549,7 +549,7 @@ def schema_of(df: Any) -> type[_TypedDatasetBase]:
     else:
         raise TypeError(f"Expected a DataFrame, got {type(df).__name__}")
 
-    # Returns a CLASS — beartype calls isinstance(arg, cls) at runtime,
+    # Returns a CLASS: beartype calls isinstance(arg, cls) at runtime,
     # routing through _TypedDatasetMeta.__instancecheck__ for schema validation.
     return cast(type[_TypedDatasetBase], _TypedDatasetMeta(
         "SchemaType",

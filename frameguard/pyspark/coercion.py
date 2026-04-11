@@ -1,5 +1,5 @@
 """
-Type coercion rules for PySpark — implemented in pure Python.
+Type coercion rules for PySpark, implemented in pure Python.
 
 This mirrors Spark's Catalyst TypeCoercion and DecimalPrecision rules so that
 frameguard can resolve derived column types without a running Spark session.
@@ -163,7 +163,7 @@ def coerce_comparison(left: Any, right: Any) -> Any:
 
 
 def coerce_cast(target: Any) -> Any:
-    """Explicit cast — the target type is the result."""
+    """Explicit cast: the target type is the result."""
     return target
 
 

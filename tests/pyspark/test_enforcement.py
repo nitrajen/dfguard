@@ -1,4 +1,4 @@
-"""enforce() decorator — subset, disable/enable, always, arm()."""
+"""enforce() decorator: subset, disable/enable, always, arm()."""
 
 import inspect
 import warnings
@@ -46,14 +46,14 @@ def test_subset_true_passes_exact_schema(raw_df):
     @enforce
     def process(df: RawSchema): return df
 
-    process(raw_df)  # exact match — always passes
+    process(raw_df)  # exact match: always passes
 
 
 def test_subset_true_passes_with_extra_columns(enriched_df):
     @enforce                            # subset=True by default
     def process(df: RawSchema): return df
 
-    process(enriched_df)  # enriched has extra 'label' column — should pass
+    process(enriched_df)  # enriched has extra 'label' column: should pass
 
 
 def test_subset_true_still_rejects_missing_columns(raw_df):
@@ -70,7 +70,7 @@ def test_subset_false_passes_exact_schema(raw_df):
     @enforce(subset=False)
     def process(df: RawSchema): return df
 
-    process(raw_df)  # exact match — passes
+    process(raw_df)  # exact match: passes
 
 
 def test_subset_false_rejects_extra_columns(enriched_df):
@@ -78,7 +78,7 @@ def test_subset_false_rejects_extra_columns(enriched_df):
     def process(df: RawSchema): return df
 
     with pytest.raises(TypeError, match="Schema mismatch"):
-        process(enriched_df)  # enriched has extra 'label' — rejected
+        process(enriched_df)  # enriched has extra 'label': rejected
 
 
 def test_subset_false_rejects_missing_columns(raw_df):
@@ -94,7 +94,7 @@ def test_subset_false_rejects_missing_columns(raw_df):
 def test_global_subset_false_rejects_extra_columns(enriched_df):
     _e._SUBSET = False  # simulate fg.arm(subset=False)
 
-    @enforce          # no explicit subset — inherits global
+    @enforce          # no explicit subset: inherits global
     def process(df: RawSchema): return df
 
     with pytest.raises(TypeError, match="Schema mismatch"):
@@ -104,7 +104,7 @@ def test_global_subset_false_rejects_extra_columns(enriched_df):
 def test_function_level_overrides_global(enriched_df):
     _e._SUBSET = False  # global says exact
 
-    @enforce(subset=True)   # function says subset — wins
+    @enforce(subset=True)   # function says subset: wins
     def process(df: RawSchema): return df
 
     process(enriched_df)  # passes despite global subset=False
@@ -113,7 +113,7 @@ def test_function_level_overrides_global(enriched_df):
 def test_global_subset_true_with_function_override_false(enriched_df):
     _e._SUBSET = True   # global says subset
 
-    @enforce(subset=False)   # function says exact — wins
+    @enforce(subset=False)   # function says exact: wins
     def process(df: RawSchema): return df
 
     with pytest.raises(TypeError, match="Schema mismatch"):

@@ -41,11 +41,11 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
-# UP007 (X | Y for Optional) is suppressed where PySpark DataType instances are used:
-# DataType doesn't implement __or__, so Optional[X] is required there.
+# UP007/UP045 (Optional[X] -> X | None) are suppressed where PySpark DataType instances
+# are used as annotations: DataType doesn't implement __or__, so Optional[X] is required.
 [tool.ruff.lint.per-file-ignores]
-"frameguard/pyspark/schema.py" = ["UP007"]
-"tests/**/*.py"                = ["UP007"]
+"frameguard/pyspark/schema.py" = ["UP007", "UP045"]
+"tests/**/*.py"                = ["UP007", "UP045"]
 
 [tool.mypy]
 python_version  = "3.10"

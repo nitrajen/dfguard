@@ -5,16 +5,15 @@ recursive equality for any nesting depth. These tests confirm that frameguard
 does not hardcode specific types and correctly handles the full type hierarchy.
 """
 
-import pytest
-from pyspark.sql import types as T
 from typing import Optional
 
-import frameguard.pyspark as fg
+import pytest
+from pyspark.sql import types as T
+
 from frameguard.pyspark import SparkSchema, enforce
 
-
 # ---------------------------------------------------------------------------
-# Schema fixtures — defined once, reused across tests
+# Schema fixtures: defined once, reused across tests
 # ---------------------------------------------------------------------------
 
 class AddressSchema(SparkSchema):
@@ -141,7 +140,7 @@ def test_map_col_enforce_passes(spark):
 
 
 # ---------------------------------------------------------------------------
-# ArrayType(StructType) — array of structs
+# ArrayType(StructType): array of structs
 # ---------------------------------------------------------------------------
 
 def test_array_of_structs_isinstance_passes(spark):
@@ -188,7 +187,7 @@ def test_array_of_structs_enforce_passes(spark):
 
 
 # ---------------------------------------------------------------------------
-# Deep nesting — MapType(String, ArrayType(Double))
+# Deep nesting: MapType(String, ArrayType(Double))
 # ---------------------------------------------------------------------------
 
 def test_deep_nesting_isinstance_passes(spark):
@@ -219,7 +218,7 @@ def test_deep_nesting_wrong_inner_type_fails(spark):
 # ---------------------------------------------------------------------------
 
 def test_subset_false_exact_with_array_col(spark):
-    """subset=False requires exact column name set — works correctly with array columns."""
+    """subset=False requires exact column name set; works correctly with array columns."""
     @enforce(subset=False)
     def process(df: EventSchema): return df
 

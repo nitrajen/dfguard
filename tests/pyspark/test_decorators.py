@@ -35,7 +35,7 @@ def test_typed_transform_validates_input(spark, input_df):
 
 
 def test_typed_transform_rejects_wrong_input(spark, input_df):
-    @typed_transform(input_schema=OutputSchema)   # requires revenue — not present
+    @typed_transform(input_schema=OutputSchema)   # requires revenue: not present
     def process(df):
         return df
 
