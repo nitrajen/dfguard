@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.2](https://github.com/nitrajen/dfguard/compare/v0.1.1...v0.1.2) (2026-04-11)
+
+
+### Bug Fixes
+
+* pass CODECOV_TOKEN as action input not env var ([9d7fed9](https://github.com/nitrajen/dfguard/commit/9d7fed9c0f250f6bed1509c31a0da6a5fdf2be6d))
+* revert to direct Codecov badge URL ([8628226](https://github.com/nitrajen/dfguard/commit/8628226f40b29fba26e45d312179ab38fb61ba61))
+* use shields.io for coverage badge ([24be83d](https://github.com/nitrajen/dfguard/commit/24be83d57532010421136a00088f9d54e8710c40))
+* use shields.io for coverage badge (100% coverage) ([fef27ea](https://github.com/nitrajen/dfguard/commit/fef27eae6a4cbd84721f5988d1953890e7040250))
+
 ## [0.1.1](https://github.com/nitrajen/dfguard/compare/v0.1.0...v0.1.1) (2026-04-11)
 
 
