@@ -57,8 +57,8 @@ Declare the schema as a class. No live DataFrame needed.
 .. code-block:: python
 
    import frameguard.pyspark as fg
+   from frameguard.pyspark import Optional
    from pyspark.sql import SparkSession, types as T
-   from typing import Optional
 
    spark = SparkSession.builder.getOrCreate()
 
@@ -86,10 +86,10 @@ Declare the schema as a class. No live DataFrame needed.
 
 .. note::
 
-   PySpark ``DataType`` instances (``T.StringType()``, ``T.LongType()``, etc.) do not
-   support Python's ``X | None`` union syntax. Use ``Optional[T.XxxType()]`` for
-   nullable primitive fields. ``NestedSchema | None`` works for nested SparkSchema
-   subclasses because those are ordinary Python classes.
+   For nullable fields, use ``Optional`` imported from ``frameguard.pyspark``, not from
+   ``typing``. PySpark ``DataType`` instances are not Python classes, and ``typing.Optional``
+   raises ``TypeError`` on Python 3.10 with non-class arguments. ``frameguard.pyspark.Optional``
+   is a drop-in replacement that works on all supported Python versions.
 
 Choosing between the two
 ~~~~~~~~~~~~~~~~~~~~~~~~~

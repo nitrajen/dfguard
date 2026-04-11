@@ -342,8 +342,8 @@ use as a type annotation:</p>
 <h2>fg.SparkSchema<a class="headerlink" href="#fg-sparkschema" title="Link to this heading">¶</a></h2>
 <p>Declare a schema as a class using real PySpark types. No live DataFrame needed.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
