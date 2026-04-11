@@ -77,8 +77,8 @@ Exact matching: a DataFrame with extra columns does **not** satisfy `RawSchema`.
 ### Declare upfront
 
 ```python
+from frameguard.pyspark import Optional
 from pyspark.sql import types as T
-from typing import Optional
 
 class OrderSchema(fg.SparkSchema):
     order_id: T.LongType()

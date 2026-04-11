@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from frameguard.pyspark.exceptions import SchemaValidationError, TypeAnnotationError
 from frameguard.pyspark.types import annotation_to_spark, spark_type_to_str
@@ -357,9 +357,11 @@ def _struct_field_to_annotation(
     parent_name: str,
     nested_classes: dict[str, type[SparkSchema]],
 ) -> Any:
-    """Convert a StructField to a frameguard annotation, wrapping with Optional if nullable."""
+    """Convert a StructField to a frameguard annotation, wrapping with fg.Optional if nullable."""
+    from frameguard.pyspark._nullable import _NullableAnnotation
+
     annotation = _spark_type_to_annotation(field.dataType, parent_name, nested_classes)
-    return Optional[annotation] if field.nullable else annotation
+    return _NullableAnnotation(annotation) if field.nullable else annotation
 
 
 def _spark_type_to_annotation(

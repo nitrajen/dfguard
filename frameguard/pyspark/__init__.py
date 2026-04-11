@@ -28,8 +28,7 @@ Declaring schemas upfront (no live DataFrame required)
 ::
 
     from pyspark.sql import types as T
-    from typing import Optional
-    from frameguard.pyspark import SparkSchema, enforce
+    from frameguard.pyspark import SparkSchema, Optional, enforce
 
     class OrderSchema(SparkSchema):
         order_id: T.LongType()
@@ -75,6 +74,7 @@ except ImportError as _e:
 
 from frameguard.pyspark._enforcement import arm, disable, enable_enforcement, enforce
 from frameguard.pyspark._inference import infer_schema
+from frameguard.pyspark._nullable import Optional
 from frameguard.pyspark.coercion import result_type
 from frameguard.pyspark.dataset import TypedGroupedData, _TypedDatasetBase, schema_of
 from frameguard.pyspark.dataset import _make_dataset as dataset
@@ -108,4 +108,5 @@ __all__ = [
     "ColumnNotFoundError",
     "infer_schema",
     "result_type",
+    "Optional",
 ]

@@ -67,8 +67,8 @@ Declare a schema as a class using real PySpark types. No live DataFrame needed.
 .. code-block:: python
 
    import frameguard.pyspark as fg
+   from frameguard.pyspark import Optional
    from pyspark.sql import types as T
-   from typing import Optional
 
    class OrderSchema(fg.SparkSchema):
        order_id: T.LongType()

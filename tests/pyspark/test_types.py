@@ -1,10 +1,9 @@
 """annotation_to_spark: converting type annotations to (DataType, nullable)."""
 
-from typing import Optional
-
 import pytest
 from pyspark.sql import types as T
 
+from frameguard.pyspark import Optional
 from frameguard.pyspark.schema import SparkSchema
 from frameguard.pyspark.types import annotation_to_spark
 

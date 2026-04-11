@@ -1,11 +1,9 @@
 """SparkSchema: definition, to_struct, validate, inheritance, from_struct, isinstance."""
 
-from typing import Optional
-
 import pytest
 from pyspark.sql import types as T
 
-from frameguard.pyspark import SparkSchema, enforce
+from frameguard.pyspark import Optional, SparkSchema, enforce
 from frameguard.pyspark.exceptions import TypeAnnotationError
 
 

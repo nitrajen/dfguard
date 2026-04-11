@@ -30,6 +30,13 @@ def annotation_to_spark(annotation: Any) -> tuple[Any, bool]:
 
     from pyspark.sql import types as T
 
+    from frameguard.pyspark._nullable import _NullableAnnotation
+
+    # fg.Optional[X] — our nullable wrapper, works on Python 3.10+
+    if isinstance(annotation, _NullableAnnotation):
+        spark_type, _ = annotation_to_spark(annotation.inner)
+        return spark_type, True
+
     origin = get_origin(annotation)
     args   = get_args(annotation)
 

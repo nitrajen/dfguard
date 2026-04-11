@@ -1,11 +1,9 @@
 """Shared fixtures for the PySpark test suite."""
 
-from typing import Optional
-
 import pytest
 from pyspark.sql import types as T
 
-from frameguard.pyspark import SparkSchema, dataset
+from frameguard.pyspark import Optional, SparkSchema, dataset
 
 
 @pytest.fixture(scope="session")

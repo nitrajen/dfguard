@@ -5,12 +5,10 @@ recursive equality for any nesting depth. These tests confirm that frameguard
 does not hardcode specific types and correctly handles the full type hierarchy.
 """
 
-from typing import Optional
-
 import pytest
 from pyspark.sql import types as T
 
-from frameguard.pyspark import SparkSchema, enforce
+from frameguard.pyspark import Optional, SparkSchema, enforce
 
 # ---------------------------------------------------------------------------
 # Schema fixtures: defined once, reused across tests
