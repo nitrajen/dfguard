@@ -8,7 +8,7 @@
 [![Python](https://img.shields.io/pypi/pyversions/dfguard)](https://pypi.org/project/dfguard/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![CI](https://github.com/nitrajen/dfguard/actions/workflows/ci.yml/badge.svg)](https://github.com/nitrajen/dfguard/actions)
-[![Coverage](https://codecov.io/gh/nitrajen/dfguard/branch/main/graph/badge.svg)](https://codecov.io/gh/nitrajen/dfguard)
+[![Coverage](https://img.shields.io/codecov/c/github/nitrajen/dfguard?label=Coverage)](https://codecov.io/gh/nitrajen/dfguard)
 [![Docs](https://img.shields.io/badge/docs-nitrajen.github.io/dfguard-blue)](https://nitrajen.github.io/dfguard/)
 
 **[Documentation](https://nitrajen.github.io/dfguard/)** | [Quickstart](https://nitrajen.github.io/dfguard/quickstart.html) | [API Reference](https://nitrajen.github.io/dfguard/api/index.html)
