@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>frameguard.pyspark._enforcement - frameguard 0.1.0</title>
+        <title>dfguard.pyspark._enforcement - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -160,7 +160,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="../../../index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -181,7 +181,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -193,8 +193,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/pyspark/schemas.html">Schemas</a></li>
@@ -239,7 +239,7 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for frameguard.pyspark._enforcement</h1><div class="highlight"><pre>
+          <h1>Source code for dfguard.pyspark._enforcement</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Schema enforcement without touching non-schema arguments.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
@@ -255,15 +255,16 @@
 
 <span class="n">F</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
 
-<span class="n">_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>   <span class="c1"># fg.disable() / fg.enable_enforcement()</span>
-<span class="n">_SUBSET</span>  <span class="o">=</span> <span class="kc">True</span>   <span class="c1"># fg.arm(subset=...) sets the global default; function-level overrides this</span>
+<span class="n">_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>   <span class="c1"># dfg.disarm() / dfg.arm() controls this</span>
+<span class="n">_ARMED</span>   <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># tracks whether arm() has been called</span>
+<span class="n">_SUBSET</span>  <span class="o">=</span> <span class="kc">True</span>   <span class="c1"># dfg.arm(subset=...) sets the global default; function-level overrides this</span>
 
 <span class="n">_UNSET</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>  <span class="c1"># sentinel: &quot;no function-level override, use global&quot;</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_schema_type</span><span class="p">(</span><span class="n">annotation</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return True when *annotation* participates in frameguard enforcement.</span>
+<span class="sd">    Return True when *annotation* participates in dfguard enforcement.</span>
 
 <span class="sd">    Any class that exposes a ``_fg_check(value, subset) -&gt; bool`` classmethod</span>
 <span class="sd">    is treated as a schema type. This is the extension point: new DataFrame</span>
@@ -305,7 +306,7 @@
 
 
 <div class="viewcode-block" id="arm">
-<a class="viewcode-back" href="../../../api/pyspark/enforcement.html#frameguard.pyspark._enforcement.arm">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/enforcement.html#dfguard.pyspark._enforcement.arm">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">arm</span><span class="p">(</span>
     <span class="n">module</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -317,24 +318,34 @@
 
 <span class="sd">    Call once from your entry point, ``__init__.py``, or ``settings.py`` (Kedro)::</span>
 
-<span class="sd">        import frameguard.pyspark as fg</span>
+<span class="sd">        import dfguard.pyspark as dfg</span>
 
-<span class="sd">        fg.arm()                # subset=True (default): extra columns are fine</span>
-<span class="sd">        fg.arm(subset=False)    # exact match: no extra columns allowed anywhere</span>
+<span class="sd">        dfg.arm()                # subset=True (default): extra columns are fine</span>
+<span class="sd">        dfg.arm(subset=False)    # exact match: no extra columns allowed anywhere</span>
 
 <span class="sd">    The ``subset`` value becomes the global default. Individual functions decorated</span>
-<span class="sd">    with ``@fg.enforce(subset=...)`` override it for that function only.</span>
+<span class="sd">    with ``@dfg.enforce(subset=...)`` override it for that function only.</span>
+
+<span class="sd">    If called when already armed, re-enables enforcement (sets ``_ENABLED = True``)</span>
+<span class="sd">    without re-walking the package.</span>
 
 <span class="sd">    **Specific module object**::</span>
 
-<span class="sd">        fg.arm(my_module)</span>
+<span class="sd">        dfg.arm(my_module)</span>
 
 <span class="sd">    **Explicit package name**::</span>
 
-<span class="sd">        fg.arm(package=&quot;my_pipeline.nodes&quot;)</span>
+<span class="sd">        dfg.arm(package=&quot;my_pipeline.nodes&quot;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">global</span> <span class="n">_SUBSET</span>
+    <span class="k">global</span> <span class="n">_SUBSET</span><span class="p">,</span> <span class="n">_ENABLED</span><span class="p">,</span> <span class="n">_ARMED</span>
     <span class="n">_SUBSET</span> <span class="o">=</span> <span class="n">subset</span>
+    <span class="n">_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">_ARMED</span><span class="p">:</span>
+        <span class="c1"># Already armed: just re-enable and update subset, no re-walking needed.</span>
+        <span class="k">return</span>
+
+    <span class="n">_ARMED</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">):</span>
         <span class="n">_arm_module_dict</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">module</span><span class="p">),</span> <span class="n">subset</span><span class="o">=</span><span class="n">_UNSET</span><span class="p">)</span>
@@ -349,8 +360,8 @@
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">package</span> <span class="ow">or</span> <span class="n">package</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;frameguard.pyspark.arm() called from __main__. &quot;</span>
-            <span class="s2">&quot;Use @frameguard.pyspark.enforce on individual functions instead.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dfguard.pyspark.arm() called from __main__. &quot;</span>
+            <span class="s2">&quot;Use @dfguard.pyspark.enforce on individual functions instead.&quot;</span><span class="p">,</span>
             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span>
@@ -365,71 +376,55 @@
                 <span class="n">_arm_module_dict</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">mod</span><span class="p">),</span> <span class="n">subset</span><span class="o">=</span><span class="n">_UNSET</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;frameguard: skipped arming module &#39;</span><span class="si">{</span><span class="n">mod_name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;dfguard: skipped arming module &#39;</span><span class="si">{</span><span class="n">mod_name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                 <span class="p">)</span></div>
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">disable</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Disable all schema enforcement globally.</span>
-
-<span class="sd">    ``@fg.enforce(always=True)`` functions are not affected.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">disarm</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Turn off all enforcement globally. Call arm() to re-enable.&quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_ENABLED</span>
     <span class="n">_ENABLED</span> <span class="o">=</span> <span class="kc">False</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">enable_enforcement</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Re-enable enforcement after a ``fg.disable()`` call.&quot;&quot;&quot;</span>
-    <span class="k">global</span> <span class="n">_ENABLED</span>
-    <span class="n">_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <span class="nd">@overload</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">enforce</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span> <span class="o">...</span>
 
 <span class="nd">@overload</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">enforce</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">always</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span> <span class="n">subset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">enforce</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">subset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span> <span class="o">...</span>
 
 
 <div class="viewcode-block" id="enforce">
-<a class="viewcode-back" href="../../../api/pyspark/enforcement.html#frameguard.pyspark._enforcement.enforce">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/enforcement.html#dfguard.pyspark._enforcement.enforce">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">enforce</span><span class="p">(</span>
     <span class="n">func</span><span class="p">:</span> <span class="n">F</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">always</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">subset</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">_UNSET</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validate schema annotations on DataFrame arguments.</span>
 
-<span class="sd">    Only intercepts parameters annotated with a ``fg.schema_of`` type or a</span>
-<span class="sd">    ``fg.SparkSchema`` subclass. All other arguments are left completely alone.</span>
+<span class="sd">    Only intercepts parameters annotated with a ``dfg.schema_of`` type or a</span>
+<span class="sd">    ``dfg.SparkSchema`` subclass. All other arguments are left completely alone.</span>
 
-<span class="sd">    **Default**: inherits the global ``subset`` set by ``fg.arm()``:</span>
+<span class="sd">    **Default**: inherits the global ``subset`` set by ``dfg.arm()``:</span>
 
-<span class="sd">        @fg.enforce</span>
+<span class="sd">        @dfg.enforce</span>
 <span class="sd">        def process(df: OrderSchema, label: str): ...</span>
 
 <span class="sd">    **subset=True**: extra columns in the DataFrame are fine (overrides global)::</span>
 
-<span class="sd">        @fg.enforce(subset=True)</span>
+<span class="sd">        @dfg.enforce(subset=True)</span>
 <span class="sd">        def process(df: OrderSchema): ...</span>
 
 <span class="sd">    **subset=False**: DataFrame must match the schema exactly (overrides global)::</span>
 
-<span class="sd">        @fg.enforce(subset=False)</span>
+<span class="sd">        @dfg.enforce(subset=False)</span>
 <span class="sd">        def process(df: OrderSchema): ...</span>
-
-<span class="sd">    **always=True**: enforces even after ``fg.disable()`` is called::</span>
-
-<span class="sd">        @fg.enforce(always=True)</span>
-<span class="sd">        def write_to_prod(df: FinalSchema, table: str): ...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Capture the function-level subset at decoration time.</span>
-    <span class="c1"># If _UNSET, the wrapper reads _SUBSET at call-time (respects fg.arm changes).</span>
+    <span class="c1"># If _UNSET, the wrapper reads _SUBSET at call-time (respects dfg.arm changes).</span>
     <span class="n">subset_override</span> <span class="o">=</span> <span class="n">subset</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
@@ -448,7 +443,7 @@
 
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">_ENABLED</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">always</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_ENABLED</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
             <span class="c1"># Function-level subset wins; fall back to global if not set.</span>

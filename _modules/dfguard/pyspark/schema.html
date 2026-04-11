@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>frameguard.pyspark.schema - frameguard 0.1.0</title>
+        <title>dfguard.pyspark.schema - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -160,7 +160,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="../../../index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -181,7 +181,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -193,8 +193,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/pyspark/schemas.html">Schemas</a></li>
@@ -239,15 +239,15 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for frameguard.pyspark.schema</h1><div class="highlight"><pre>
+          <h1>Source code for dfguard.pyspark.schema</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;SparkSchema: declare a DataFrame&#39;s expected shape as a Python class.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaValidationError</span><span class="p">,</span> <span class="n">TypeAnnotationError</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotation_to_spark</span><span class="p">,</span> <span class="n">spark_type_to_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaValidationError</span><span class="p">,</span> <span class="n">TypeAnnotationError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotation_to_spark</span><span class="p">,</span> <span class="n">spark_type_to_str</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_SchemaError</span><span class="p">:</span>
@@ -303,7 +303,7 @@
 
 
 <div class="viewcode-block" id="SparkSchema">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.schema.SparkSchema">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.schema.SparkSchema">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SparkSchema</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">_SparkSchemaMeta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Declare a DataFrame&#39;s expected shape as a Python class.</span>
@@ -317,7 +317,7 @@
 
 <span class="sd">        from pyspark.sql import types as T</span>
 <span class="sd">        from typing import Optional</span>
-<span class="sd">        from frameguard.pyspark import SparkSchema, enforce</span>
+<span class="sd">        from dfguard.pyspark import SparkSchema, enforce</span>
 
 <span class="sd">        class OrderSchema(SparkSchema):</span>
 <span class="sd">            order_id: T.LongType()</span>
@@ -348,7 +348,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Enforcement protocol hook called by ``@fg.enforce`` at runtime.</span>
 
-<span class="sd">        Any class that exposes this method participates in frameguard enforcement</span>
+<span class="sd">        Any class that exposes this method participates in dfguard enforcement</span>
 <span class="sd">        automatically. New DataFrame backends just add this to their schema type.</span>
 
 <span class="sd">        - ``subset=True``: extra columns in *value* are fine (default).</span>
@@ -369,7 +369,7 @@
         <span class="k">return</span> <span class="n">actual_names</span> <span class="o">==</span> <span class="n">declared_names</span>
 
 <div class="viewcode-block" id="SparkSchema.to_struct">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.schema.SparkSchema.to_struct">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.schema.SparkSchema.to_struct">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_struct</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the ``StructType`` for this schema. Result is cached after the first call.&quot;&quot;&quot;</span>
@@ -393,7 +393,7 @@
 
 
 <div class="viewcode-block" id="SparkSchema.from_struct">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.schema.SparkSchema.from_struct">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.schema.SparkSchema.from_struct">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_struct</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">struct</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GeneratedSchema&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">SparkSchema</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -420,22 +420,23 @@
 
 
 <div class="viewcode-block" id="SparkSchema.validate">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.schema.SparkSchema.validate">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.schema.SparkSchema.validate">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">df_or_schema</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">subset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">_SchemaError</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compare a DataFrame or StructType against this schema.</span>
 
 <span class="sd">        Returns a list of errors; an empty list means the schema is valid.</span>
-<span class="sd">        When ``strict=True``, extra columns beyond the declared schema are also errors.</span>
+<span class="sd">        When ``subset=True`` (default), extra columns beyond the declared schema are fine.</span>
+<span class="sd">        When ``subset=False``, extra columns are also reported as errors.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span> <span class="k">as</span> <span class="n">SparkDF</span>
 
-        <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">_TypedDatasetBase</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">_TypedDatasetBase</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df_or_schema</span><span class="p">,</span> <span class="n">_TypedDatasetBase</span><span class="p">):</span>
             <span class="n">actual_struct</span> <span class="o">=</span> <span class="n">df_or_schema</span><span class="o">.</span><span class="n">schema</span>
@@ -443,22 +444,22 @@
             <span class="n">actual_struct</span> <span class="o">=</span> <span class="n">df_or_schema</span><span class="o">.</span><span class="n">schema</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">actual_struct</span> <span class="o">=</span> <span class="n">df_or_schema</span>
-        <span class="k">return</span> <span class="n">_compare_structs</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">to_struct</span><span class="p">(),</span> <span class="n">actual_struct</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">_compare_structs</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">to_struct</span><span class="p">(),</span> <span class="n">actual_struct</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="ow">not</span> <span class="n">subset</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SparkSchema.assert_valid">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.schema.SparkSchema.assert_valid">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.schema.SparkSchema.assert_valid">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">assert_valid</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">df_or_schema</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">subset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">history</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Like ``validate`` but raises ``SchemaValidationError`` on the first failure.&quot;&quot;&quot;</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.history</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaHistory</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.history</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaHistory</span>
 
-        <span class="n">errors</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">df_or_schema</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">df_or_schema</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="n">subset</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
             <span class="n">h</span> <span class="o">=</span> <span class="n">history</span> <span class="ow">or</span> <span class="n">SchemaHistory</span><span class="o">.</span><span class="n">initial</span><span class="p">(</span>
                 <span class="n">df_or_schema</span><span class="o">.</span><span class="n">schema</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">df_or_schema</span><span class="p">,</span> <span class="s2">&quot;schema&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">df_or_schema</span>
@@ -467,17 +468,17 @@
 
 
 <div class="viewcode-block" id="SparkSchema.empty">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.schema.SparkSchema.empty">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.schema.SparkSchema.empty">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">empty</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">spark</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an empty typed dataset instance with this schema and zero rows.&quot;&quot;&quot;</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">_make_dataset</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">_make_dataset</span>
 
         <span class="k">return</span> <span class="n">_make_dataset</span><span class="p">(</span><span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([],</span> <span class="bp">cls</span><span class="o">.</span><span class="n">to_struct</span><span class="p">()))</span></div>
 
 
 <div class="viewcode-block" id="SparkSchema.to_code">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.schema.SparkSchema.to_code">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.schema.SparkSchema.to_code">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_code</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate valid Python source code for this schema class.&quot;&quot;&quot;</span>
@@ -492,7 +493,7 @@
 
 
 <div class="viewcode-block" id="SparkSchema.diff">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.schema.SparkSchema.diff">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.schema.SparkSchema.diff">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">diff</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">SparkSchema</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a human-readable diff between two SparkSchema classes.&quot;&quot;&quot;</span>
@@ -623,8 +624,8 @@
     <span class="n">parent_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">nested_classes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">[</span><span class="n">SparkSchema</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a StructField to a frameguard annotation, wrapping with fg.Optional if nullable.&quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark._nullable</span><span class="w"> </span><span class="kn">import</span> <span class="n">_NullableAnnotation</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a StructField to a dfguard annotation, wrapping with fg.Optional if nullable.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark._nullable</span><span class="w"> </span><span class="kn">import</span> <span class="n">_NullableAnnotation</span>
 
     <span class="n">annotation</span> <span class="o">=</span> <span class="n">_spark_type_to_annotation</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">dataType</span><span class="p">,</span> <span class="n">parent_name</span><span class="p">,</span> <span class="n">nested_classes</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_NullableAnnotation</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">nullable</span> <span class="k">else</span> <span class="n">annotation</span>

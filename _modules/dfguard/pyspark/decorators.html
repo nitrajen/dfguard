@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>frameguard.pyspark.exceptions - frameguard 0.1.0</title>
+        <title>dfguard.pyspark.decorators - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -160,7 +160,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="../../../index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -181,7 +181,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -193,8 +193,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/pyspark/schemas.html">Schemas</a></li>
@@ -239,73 +239,98 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for frameguard.pyspark.exceptions</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">frameguard.pyspark.exceptions</span>
-<span class="sd">~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
-<span class="sd">All exceptions raised by the frameguard PySpark backend.</span>
-<span class="sd">Every exception carries the full schema history so the caller can trace</span>
-<span class="sd">exactly where the schema diverged from expectations.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+          <h1>Source code for dfguard.pyspark.decorators</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Optional decorators for schema validation at function boundaries.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.history</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaHistory</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSchema</span>
+
+<span class="n">F</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="DfTypesError">
-<a class="viewcode-back" href="../../../api/pyspark/exceptions.html#frameguard.pyspark.exceptions.DfTypesError">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">DfTypesError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for all frameguard errors.&quot;&quot;&quot;</span></div>
-
-
-
-<div class="viewcode-block" id="SchemaValidationError">
-<a class="viewcode-back" href="../../../api/pyspark/exceptions.html#frameguard.pyspark.exceptions.SchemaValidationError">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SchemaValidationError</span><span class="p">(</span><span class="n">DfTypesError</span><span class="p">):</span>
+<div class="viewcode-block" id="typed_transform">
+<a class="viewcode-back" href="../../../api/pyspark/decorators.html#dfguard.pyspark.decorators.typed_transform">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">typed_transform</span><span class="p">(</span>
+    <span class="n">input_schema</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">SparkSchema</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_schema</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">SparkSchema</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Raised when a dataset&#39;s runtime schema does not match the declared schema.</span>
+<span class="sd">    Decorator that validates schema at function boundaries.</span>
 
-<span class="sd">    Attributes</span>
+<span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    errors:</span>
-<span class="sd">        Human-readable list of individual mismatches.</span>
-<span class="sd">    history:</span>
-<span class="sd">        Full schema evolution history of the dataset at the point of failure.</span>
+<span class="sd">    input_schema:</span>
+<span class="sd">        SparkSchema to validate all DataFrame arguments against.</span>
+<span class="sd">    output_schema:</span>
+<span class="sd">        SparkSchema to validate the return value against.</span>
+<span class="sd">    strict:</span>
+<span class="sd">        When True, extra columns beyond the declared schema are errors.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span> <span class="k">as</span> <span class="n">SparkDF</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">errors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">history</span><span class="p">:</span> <span class="n">SchemaHistory</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span>  <span class="o">=</span> <span class="n">errors</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">history</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">_make_dataset</span><span class="p">,</span> <span class="n">_TypedDatasetBase</span>
 
-        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Schema validation failed:&quot;</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✗ </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># _is_instance: True only for real _TypedDatasetBase objects (not plain SparkDFs)</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">_is_instance</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__instancecheck__</span><span class="p">(</span><span class="n">_TypedDatasetBase</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Schema evolution (most recent last):&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">change</span> <span class="ow">in</span> <span class="n">history</span><span class="o">.</span><span class="n">changes</span><span class="p">:</span>
-            <span class="n">summary</span> <span class="o">=</span> <span class="n">change</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  [</span><span class="si">{</span><span class="n">change</span><span class="o">.</span><span class="n">operation</span><span class="si">}</span><span class="s2">]  </span><span class="si">{</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># Normalise arguments: wrap raw DataFrames in _TypedDatasetBase instances</span>
+            <span class="n">new_args</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">SparkDF</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_instance</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+                    <span class="n">arg</span> <span class="o">=</span> <span class="n">_make_dataset</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">_is_instance</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="ow">and</span> <span class="n">input_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">arg</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">input_schema</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+                <span class="n">new_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span></div>
+            <span class="n">new_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">SparkDF</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_instance</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">_make_dataset</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">_is_instance</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="ow">and</span> <span class="n">input_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">val</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">input_schema</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+                <span class="n">new_kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">new_args</span><span class="p">,</span> <span class="o">**</span><span class="n">new_kwargs</span><span class="p">)</span>
+
+            <span class="c1"># Validate and normalise output</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">SparkDF</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_instance</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">_make_dataset</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">_is_instance</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="ow">and</span> <span class="n">output_schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">output_schema</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span>  <span class="c1"># type: ignore[return-value]</span>
+
+    <span class="k">return</span> <span class="n">decorator</span></div>
 
 
 
-<div class="viewcode-block" id="TypeAnnotationError">
-<a class="viewcode-back" href="../../../api/pyspark/exceptions.html#frameguard.pyspark.exceptions.TypeAnnotationError">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">TypeAnnotationError</span><span class="p">(</span><span class="n">DfTypesError</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a SparkSchema annotation cannot be converted to a Spark DataType.&quot;&quot;&quot;</span></div>
+<div class="viewcode-block" id="check_schema">
+<a class="viewcode-back" href="../../../api/pyspark/decorators.html#dfguard.pyspark.decorators.check_schema">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_schema</span><span class="p">(</span>
+    <span class="n">schema</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">SparkSchema</span><span class="p">],</span>
+    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">F</span><span class="p">],</span> <span class="n">F</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lightweight decorator that only validates the return value.</span>
 
-
-
-<div class="viewcode-block" id="ColumnNotFoundError">
-<a class="viewcode-back" href="../../../api/pyspark/exceptions.html#frameguard.pyspark.exceptions.ColumnNotFoundError">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ColumnNotFoundError</span><span class="p">(</span><span class="n">DfTypesError</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when an expected column is absent from the DataFrame.&quot;&quot;&quot;</span></div>
+<span class="sd">    Useful when the input does not need validation but you want to</span>
+<span class="sd">    guarantee the output shape.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">typed_transform</span><span class="p">(</span><span class="n">output_schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Decorators" href="decorators.html"><link rel="prev" title="Enforcement" href="enforcement.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Dataset - frameguard 0.1.0</title>
+        <title>Dataset - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="../../index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -194,8 +194,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="schemas.html">Schemas</a></li>
@@ -248,10 +248,10 @@
         <article role="main" id="furo-main-content">
           <section id="dataset">
 <h1>Dataset<a class="headerlink" href="#dataset" title="Link to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">fg.dataset(df)</span></code> wraps a plain DataFrame in a tracked instance. Every
+<p><code class="docutils literal notranslate"><span class="pre">dfg.dataset(df)</span></code> wraps a plain DataFrame in a tracked instance. Every
 transform is recorded in <code class="docutils literal notranslate"><span class="pre">schema_history</span></code>, so when validation fails
 you can see exactly where the schema diverged.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
 
 <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
@@ -260,7 +260,7 @@ you can see exactly where the schema diverged.</p>
     <span class="s2">&quot;order_id LONG, amount DOUBLE, quantity INT, tags ARRAY&lt;STRING&gt;, zip STRING&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">ds</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">dataset</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">dfg</span><span class="o">.</span><span class="n">dataset</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span>
 
@@ -274,7 +274,7 @@ you can see exactly where the schema diverged.</p>
 <code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">join</span></code>, etc.) work normally. The tracked instance adds
 schema history on top.</p>
 <p>Validate against a schema at any point:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
 <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
@@ -283,11 +283,11 @@ schema history on top.</p>
     <span class="s2">&quot;order_id LONG, amount DOUBLE, quantity INT&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">dfg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
 
-<span class="n">ds</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">dataset</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">dfg</span><span class="o">.</span><span class="n">dataset</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 <span class="n">ds</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">OrderSchema</span><span class="p">)</span>   <span class="c1"># raises SchemaValidationError if columns are missing</span>
 </pre></div>
@@ -295,8 +295,8 @@ schema history on top.</p>
 <p>When <code class="docutils literal notranslate"><span class="pre">validate</span></code> fails, the error message includes the full history so
 you can see which step introduced the mismatch.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset._TypedDatasetBase">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">frameguard.pyspark.dataset.</span></span><span class="sig-name descname"><span class="pre">_TypedDatasetBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_skip_validation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#_TypedDatasetBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset._TypedDatasetBase">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dfguard.pyspark.dataset.</span></span><span class="sig-name descname"><span class="pre">_TypedDatasetBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_skip_validation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#_TypedDatasetBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="Link to this definition">¶</a></dt>
 <dd><p>Internal base shared by all schema type subclasses.</p>
 <p>Users never instantiate this directly. They call <code class="docutils literal notranslate"><span class="pre">schema_of(df)</span></code>
 which returns a subclass whose constructor validates the incoming schema.</p>
@@ -304,7 +304,7 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>Any</em>)</p></li>
-<li><p><strong>history</strong> (<a class="reference internal" href="history.html#frameguard.pyspark.history.SchemaHistory" title="frameguard.pyspark.history.SchemaHistory"><em>SchemaHistory</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>history</strong> (<a class="reference internal" href="history.html#dfguard.pyspark.history.SchemaHistory" title="dfguard.pyspark.history.SchemaHistory"><em>SchemaHistory</em></a><em> | </em><em>None</em>)</p></li>
 <li><p><strong>strict</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
 <li><p><strong>_skip_validation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
 </ul>
@@ -313,22 +313,22 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">frameguard.pyspark.dataset.</span></span><span class="sig-name descname"><span class="pre">TypedGroupedData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grouped_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dfguard.pyspark.dataset.</span></span><span class="sig-name descname"><span class="pre">TypedGroupedData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grouped_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>grouped_data</strong> (<em>Any</em>)</p></li>
-<li><p><strong>parent</strong> (<a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><em>_TypedDatasetBase</em></a>)</p></li>
+<li><p><strong>parent</strong> (<a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><em>_TypedDatasetBase</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.agg">
-<span class="sig-name descname"><span class="pre">agg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">exprs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.agg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.agg" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.agg">
+<span class="sig-name descname"><span class="pre">agg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">exprs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.agg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.agg" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>exprs</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>)</p>
@@ -337,21 +337,21 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.count">
-<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.count" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.count" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.mean">
-<span class="sig-name descname"><span class="pre">mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.mean" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.mean">
+<span class="sig-name descname"><span class="pre">mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.mean" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p>
@@ -360,11 +360,11 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.avg">
-<span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.avg" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.avg">
+<span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.avg" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p>
@@ -373,11 +373,11 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.sum">
-<span class="sig-name descname"><span class="pre">sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.sum" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.sum">
+<span class="sig-name descname"><span class="pre">sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.sum" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p>
@@ -386,11 +386,11 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.min">
-<span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.min"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.min" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.min">
+<span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.min"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.min" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p>
@@ -399,11 +399,11 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.max">
-<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.max"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.max" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.max"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.max" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>cols</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p>
@@ -412,11 +412,11 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.pivot">
-<span class="sig-name descname"><span class="pre">pivot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pivot_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.pivot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.pivot" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.pivot">
+<span class="sig-name descname"><span class="pre">pivot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pivot_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.pivot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.pivot" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData" title="frameguard.pyspark.dataset.TypedGroupedData"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedGroupedData</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData" title="dfguard.pyspark.dataset.TypedGroupedData"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedGroupedData</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
@@ -428,11 +428,11 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.apply">
-<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">udf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.apply" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">udf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.apply" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>udf</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>)</p>
@@ -441,11 +441,11 @@ which returns a subclass whose constructor validates the incoming schema.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.dataset.TypedGroupedData.applyInPandas">
-<span class="sig-name descname"><span class="pre">applyInPandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/dataset.html#TypedGroupedData.applyInPandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.dataset.TypedGroupedData.applyInPandas" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.dataset.TypedGroupedData.applyInPandas">
+<span class="sig-name descname"><span class="pre">applyInPandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/dataset.html#TypedGroupedData.applyInPandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.dataset.TypedGroupedData.applyInPandas" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase" title="frameguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase" title="dfguard.pyspark.dataset._TypedDatasetBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
@@ -516,18 +516,18 @@ which returns a subclass whose constructor validates the incoming schema.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Dataset</a><ul>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset._TypedDatasetBase"><code class="docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData</span></code></a><ul>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.agg"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.agg()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.count"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.count()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.mean"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.mean()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.avg"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.avg()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.sum"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.sum()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.min"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.min()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.max"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.max()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.pivot"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.pivot()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.apply"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.apply()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.dataset.TypedGroupedData.applyInPandas"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.applyInPandas()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset._TypedDatasetBase"><code class="docutils literal notranslate"><span class="pre">_TypedDatasetBase</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData</span></code></a><ul>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.agg"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.agg()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.count"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.count()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.mean"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.mean()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.avg"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.avg()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.sum"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.sum()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.min"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.min()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.max"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.max()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.pivot"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.pivot()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.apply"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.apply()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.dataset.TypedGroupedData.applyInPandas"><code class="docutils literal notranslate"><span class="pre">TypedGroupedData.applyInPandas()</span></code></a></li>
 </ul>
 </li>
 </ul>

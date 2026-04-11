@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Using frameguard in Kedro" href="kedro.html"><link rel="prev" title="Data Pipeline Usage" href="pipelines.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Using dfguard in Kedro" href="kedro.html"><link rel="prev" title="Data Pipeline Usage" href="pipelines.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Using frameguard in Airflow - frameguard 0.1.0</title>
+        <title>Using dfguard in Airflow - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -194,8 +194,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/pyspark/schemas.html">Schemas</a></li>
@@ -246,30 +246,45 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="using-frameguard-in-airflow">
-<h1>Using frameguard in Airflow<a class="headerlink" href="#using-frameguard-in-airflow" title="Link to this heading">¶</a></h1>
+          <section id="using-dfguard-in-airflow">
+<h1>Using dfguard in Airflow<a class="headerlink" href="#using-dfguard-in-airflow" title="Link to this heading">¶</a></h1>
 <p>In Airflow, each task is a Python callable. Tasks receive file paths and
 configuration, create their own SparkSession, do the work, and write results
 back to storage. DataFrames never cross task boundaries; they are too large
 for XCom.</p>
-<p>This means <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on the <em>task function itself</em> gives you little:
+<p>This means <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> on the <em>task function itself</em> gives you little:
 the arguments are strings and integers, not DataFrames. The useful pattern is:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on the transformation helpers the task calls internally</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> on the transformation helpers the task calls internally</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Schema.assert_valid(df)</span></code> right after loading from storage, to catch
 schema drift from upstream before processing starts</p></li>
 </ul>
-<p>The working example lives at <code class="docutils literal notranslate"><span class="pre">examples/airflow/</span></code> in the frameguard repository.</p>
+<p>The working example lives at <code class="docutils literal notranslate"><span class="pre">examples/airflow/</span></code> in the dfguard repository.</p>
 <section id="file-structure">
 <h2>File structure<a class="headerlink" href="#file-structure" title="Link to this heading">¶</a></h2>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>airflow/
 ├── requirements.txt
 ├── pipeline/
-│   ├── __init__.py
+│   ├── __init__.py     # arms enforcement globally
 │   ├── schemas.py      # SparkSchema definitions
-│   └── transforms.py   # transformation helpers with @fg.enforce
+│   └── transforms.py   # transformation helpers
 └── dags/
     └── orders_dag.py   # DAG and task callables
+</pre></div>
+</div>
+</section>
+<section id="pipeline-init-py">
+<h2>pipeline/__init__.py<a class="headerlink" href="#pipeline-init-py" title="Link to this heading">¶</a></h2>
+<p>Arm once here. Every function in the package with a schema annotation is
+enforced automatically – no decorator needed on each one.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># pipeline/__init__.py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
+
+<span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>
+<span class="c1"># dfg.arm(subset=False)  # strict: no extra columns anywhere in the package</span>
+
+<span class="c1"># To disable enforcement globally (e.g. in tests or non-prod environments):</span>
+<span class="c1"># dfg.disarm()</span>
 </pre></div>
 </div>
 </section>
@@ -277,10 +292,10 @@ schema drift from upstream before processing starts</p></li>
 <h2>schemas.py<a class="headerlink" href="#schemas-py" title="Link to this heading">¶</a></h2>
 <p>Define schema contracts once, shared by all tasks.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># pipeline/schemas.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">dfg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">customer_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>      <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
@@ -291,7 +306,7 @@ schema drift from upstream before processing starts</p></li>
     <span class="n">revenue</span><span class="p">:</span>       <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
     <span class="n">is_high_value</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">BooleanType</span><span class="p">()</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">SummarySchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SummarySchema</span><span class="p">(</span><span class="n">dfg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">customer_id</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">total_revenue</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
     <span class="n">order_count</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
@@ -300,14 +315,15 @@ schema drift from upstream before processing starts</p></li>
 </section>
 <section id="transforms-py">
 <h2>transforms.py<a class="headerlink" href="#transforms-py" title="Link to this heading">¶</a></h2>
-<p>Pure transformation functions. Each is annotated with <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> so that
-the wrong DataFrame cannot be passed in regardless of which task calls them.</p>
+<p>Pure transformation functions. <code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> covers them
+all. <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce(subset=False)</span></code> is added where an exact schema is required
+– no extra columns allowed, useful before writing to a fixed-schema sink.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># pipeline/transforms.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pipeline.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnrichedOrderSchema</span><span class="p">,</span> <span class="n">RawOrderSchema</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pipeline.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnrichedOrderSchema</span><span class="p">,</span> <span class="n">RawOrderSchema</span><span class="p">,</span> <span class="n">SummarySchema</span>
 
-<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="c1"># Covered by dfg.arm() -- no decorator needed</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">RawOrderSchema</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">raw</span>
@@ -315,7 +331,8 @@ the wrong DataFrame cannot be passed in regardless of which task calls them.</p>
         <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;is_high_value&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">500.0</span><span class="p">)</span>
     <span class="p">)</span>
 
-<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="c1"># subset=False: the summary written to storage must match SummarySchema exactly</span>
+<span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">summarise</span><span class="p">(</span><span class="n">enriched</span><span class="p">:</span> <span class="n">EnrichedOrderSchema</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">enriched</span>
@@ -355,7 +372,7 @@ stops its own SparkSession.</p>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">INPUT_PATH</span><span class="p">)</span>
     <span class="n">RawOrderSchema</span><span class="o">.</span><span class="n">assert_valid</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>   <span class="c1"># fail fast if upstream schema changed</span>
 
-    <span class="n">enriched</span> <span class="o">=</span> <span class="n">enrich</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>             <span class="c1"># @fg.enforce guards the function</span>
+    <span class="n">enriched</span> <span class="o">=</span> <span class="n">enrich</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>             <span class="c1"># @dfg.enforce guards the function</span>
     <span class="n">enriched</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="s2">&quot;overwrite&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">ENRICH_PATH</span><span class="p">)</span>
     <span class="n">spark</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 
@@ -407,18 +424,18 @@ data, it fails at the function call:</p>
             quantity:int, status:string
 </pre></div>
 </div>
-<p>The error is raised before Spark plans a single task. The message tells you
-which function, which argument, what was expected, and what was actually passed.</p>
+<p>The error is raised at the function call. The message tells you which function,
+which argument, what was expected, and what was actually passed.</p>
 <p>If upstream data changes shape and <code class="docutils literal notranslate"><span class="pre">assert_valid</span></code> catches it:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SchemaValidationError: Schema validation failed:
-  Column &#39;revenue&#39;: missing
+  ✗ Missing column &#39;revenue&#39; (expected double, nullable=False)
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">assert_valid</span></code> reports all missing and mismatched fields in one message,
 not just the first one it finds.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Use <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on every transformation helper. Use
+<p>Use <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> on every transformation helper. Use
 <code class="docutils literal notranslate"><span class="pre">Schema.assert_valid(df)</span></code> at the start of every task that reads from
 storage. Together they give you two layers: one at the storage boundary
 (schema drift from upstream), one at the function boundary (wrong data
@@ -437,7 +454,7 @@ passed to wrong transform).</p>
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Using frameguard in Kedro</div>
+                <div class="title">Using dfguard in Kedro</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -482,8 +499,9 @@ passed to wrong transform).</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Using frameguard in Airflow</a><ul>
+<li><a class="reference internal" href="#">Using dfguard in Airflow</a><ul>
 <li><a class="reference internal" href="#file-structure">File structure</a></li>
+<li><a class="reference internal" href="#pipeline-init-py">pipeline/__init__.py</a></li>
 <li><a class="reference internal" href="#schemas-py">schemas.py</a></li>
 <li><a class="reference internal" href="#transforms-py">transforms.py</a></li>
 <li><a class="reference internal" href="#orders-dag-py">orders_dag.py</a></li>

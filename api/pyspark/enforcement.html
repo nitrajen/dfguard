@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Dataset" href="dataset.html"><link rel="prev" title="Schemas" href="schemas.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Enforcement - frameguard 0.1.0</title>
+        <title>Enforcement - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="../../index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -194,8 +194,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="schemas.html">Schemas</a></li>
@@ -248,29 +248,29 @@
         <article role="main" id="furo-main-content">
           <section id="enforcement">
 <h1>Enforcement<a class="headerlink" href="#enforcement" title="Link to this heading">¶</a></h1>
-<p>frameguard enforces schema annotations at the function call site, before
+<p>dfguard enforces schema annotations at the function call site, before
 Spark plans anything. There are two ways to enable this, depending on
 whether you are writing a package or a script.</p>
 <p>Pick one. You do not need both.</p>
 <hr class="docutils" />
-<section id="frameguard-pyspark-arm">
-<h2>frameguard.pyspark.arm<a class="headerlink" href="#frameguard-pyspark-arm" title="Link to this heading">¶</a></h2>
+<section id="dfguard-pyspark-arm">
+<h2>dfguard.pyspark.arm<a class="headerlink" href="#dfguard-pyspark-arm" title="Link to this heading">¶</a></h2>
 <p>The preferred approach for packages (Kedro nodes, Airflow operators,
 any module that gets <em>imported</em> rather than run directly). Call it once
 from your entry point and every annotated function in the entire package
 is enforced automatically.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/settings.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 
-<span class="n">fg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>   <span class="c1"># walks and arms the entire calling package</span>
+<span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>   <span class="c1"># walks and arms the entire calling package</span>
 </pre></div>
 </div>
 <p>Node files stay clean with no imports or decorators needed:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/nodes.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RawSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawSchema</span><span class="p">(</span><span class="n">dfg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
     <span class="n">quantity</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">()</span>
@@ -282,27 +282,29 @@ is enforced automatically.</p>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> has no effect and emits a warning when called from
-<code class="docutils literal notranslate"><span class="pre">__main__</span></code> (a script run directly). Use <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> there instead.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> has no effect and emits a warning when called from
+<code class="docutils literal notranslate"><span class="pre">__main__</span></code> (a script run directly). Use <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> there instead.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="frameguard.pyspark._enforcement.arm">
-<span class="sig-prename descclassname"><span class="pre">frameguard.pyspark._enforcement.</span></span><span class="sig-name descname"><span class="pre">arm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/_enforcement.html#arm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark._enforcement.arm" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark._enforcement.arm">
+<span class="sig-prename descclassname"><span class="pre">dfguard.pyspark._enforcement.</span></span><span class="sig-name descname"><span class="pre">arm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/_enforcement.html#arm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark._enforcement.arm" title="Link to this definition">¶</a></dt>
 <dd><p>Arm the entire calling package and set the global subset default.</p>
 <p>Call once from your entry point, <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>, or <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> (Kedro):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 
-<span class="n">fg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>                <span class="c1"># subset=True (default): extra columns are fine</span>
-<span class="n">fg</span><span class="o">.</span><span class="n">arm</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>    <span class="c1"># exact match: no extra columns allowed anywhere</span>
+<span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>                <span class="c1"># subset=True (default): extra columns are fine</span>
+<span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>    <span class="c1"># exact match: no extra columns allowed anywhere</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">subset</span></code> value becomes the global default. Individual functions decorated
-with <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce(subset=...)</span></code> override it for that function only.</p>
+with <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce(subset=...)</span></code> override it for that function only.</p>
+<p>If called when already armed, re-enables enforcement (sets <code class="docutils literal notranslate"><span class="pre">_ENABLED</span> <span class="pre">=</span> <span class="pre">True</span></code>)
+without re-walking the package.</p>
 <p><strong>Specific module object</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fg</span><span class="o">.</span><span class="n">arm</span><span class="p">(</span><span class="n">my_module</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">(</span><span class="n">my_module</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Explicit package name</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fg</span><span class="o">.</span><span class="n">arm</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="s2">&quot;my_pipeline.nodes&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="s2">&quot;my_pipeline.nodes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -321,13 +323,13 @@ with <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforc
 
 </section>
 <hr class="docutils" />
-<section id="frameguard-pyspark-enforce">
-<h2>frameguard.pyspark.enforce<a class="headerlink" href="#frameguard-pyspark-enforce" title="Link to this heading">¶</a></h2>
+<section id="dfguard-pyspark-enforce">
+<h2>dfguard.pyspark.enforce<a class="headerlink" href="#dfguard-pyspark-enforce" title="Link to this heading">¶</a></h2>
 <p>A per-function decorator for scripts and notebooks.</p>
-<p>Only intercepts parameters annotated with a <code class="docutils literal notranslate"><span class="pre">fg.schema_of</span></code> type or a
-<code class="docutils literal notranslate"><span class="pre">fg.SparkSchema</span></code> subclass. All other arguments (<code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>,
+<p>Only intercepts parameters annotated with a <code class="docutils literal notranslate"><span class="pre">dfg.schema_of</span></code> type or a
+<code class="docutils literal notranslate"><span class="pre">dfg.SparkSchema</span></code> subclass. All other arguments (<code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>,
 custom classes) are left completely alone.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
 
 <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
@@ -340,9 +342,9 @@ custom classes) are left completely alone.</p>
     <span class="s2">&quot;user_id LONG, name STRING&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">RawSchema</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">schema_of</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
+<span class="n">RawSchema</span> <span class="o">=</span> <span class="n">dfg</span><span class="o">.</span><span class="n">schema_of</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
 
-<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">RawSchema</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
     <span class="c1"># only df is checked; label and count are not touched</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
@@ -352,19 +354,18 @@ custom classes) are left completely alone.</p>
 </pre></div>
 </div>
 <dl class="py function">
-<dt class="sig sig-object py" id="frameguard.pyspark._enforcement.enforce">
-<span class="sig-prename descclassname"><span class="pre">frameguard.pyspark._enforcement.</span></span><span class="sig-name descname"><span class="pre">enforce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">always</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;object</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/_enforcement.html#enforce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark._enforcement.enforce" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark._enforcement.enforce">
+<span class="sig-prename descclassname"><span class="pre">dfguard.pyspark._enforcement.</span></span><span class="sig-name descname"><span class="pre">enforce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;object</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/_enforcement.html#enforce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark._enforcement.enforce" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Overloads<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>func</strong> (<span class="sphinx_autodoc_typehints-type">F</span>) → <span class="sphinx_autodoc_typehints-type">F</span></p></li>
-<li><p><strong>func</strong> (<span class="sphinx_autodoc_typehints-type">None</span>), <strong>always</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>), <strong>subset</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) → <span class="sphinx_autodoc_typehints-type">Callable[[F], F]</span></p></li>
+<li><p><strong>func</strong> (<span class="sphinx_autodoc_typehints-type">None</span>), <strong>subset</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>) → <span class="sphinx_autodoc_typehints-type">Callable[[F], F]</span></p></li>
 </ul>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>func</strong> (<em>F</em><em> | </em><em>None</em>)</p></li>
-<li><p><strong>always</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
 <li><p><strong>subset</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>)</p></li>
 </ul>
 </dd>
@@ -373,26 +374,21 @@ custom classes) are left completely alone.</p>
 </dd>
 </dl>
 <p>Validate schema annotations on DataFrame arguments.</p>
-<p>Only intercepts parameters annotated with a <code class="docutils literal notranslate"><span class="pre">fg.schema_of</span></code> type or a
-<code class="docutils literal notranslate"><span class="pre">fg.SparkSchema</span></code> subclass. All other arguments are left completely alone.</p>
-<p><strong>Default</strong>: inherits the global <code class="docutils literal notranslate"><span class="pre">subset</span></code> set by <code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code>:</p>
+<p>Only intercepts parameters annotated with a <code class="docutils literal notranslate"><span class="pre">dfg.schema_of</span></code> type or a
+<code class="docutils literal notranslate"><span class="pre">dfg.SparkSchema</span></code> subclass. All other arguments are left completely alone.</p>
+<p><strong>Default</strong>: inherits the global <code class="docutils literal notranslate"><span class="pre">subset</span></code> set by <code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code>:</p>
 <blockquote>
-<div><p>&#64;fg.enforce
+<div><p>&#64;dfg.enforce
 def process(df: OrderSchema, label: str): …</p>
 </div></blockquote>
 <p><strong>subset=True</strong>: extra columns in the DataFrame are fine (overrides global):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">OrderSchema</span><span class="p">):</span> <span class="o">...</span>
 </pre></div>
 </div>
 <p><strong>subset=False</strong>: DataFrame must match the schema exactly (overrides global):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">OrderSchema</span><span class="p">):</span> <span class="o">...</span>
-</pre></div>
-</div>
-<p><strong>always=True</strong>: enforces even after <code class="docutils literal notranslate"><span class="pre">fg.disable()</span></code> is called:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span><span class="p">(</span><span class="n">always</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">write_to_prod</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">FinalSchema</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span> <span class="o">...</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -456,12 +452,12 @@ def process(df: OrderSchema, label: str): …</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Enforcement</a><ul>
-<li><a class="reference internal" href="#frameguard-pyspark-arm">frameguard.pyspark.arm</a><ul>
-<li><a class="reference internal" href="#frameguard.pyspark._enforcement.arm"><code class="docutils literal notranslate"><span class="pre">arm()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard-pyspark-arm">dfguard.pyspark.arm</a><ul>
+<li><a class="reference internal" href="#dfguard.pyspark._enforcement.arm"><code class="docutils literal notranslate"><span class="pre">arm()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#frameguard-pyspark-enforce">frameguard.pyspark.enforce</a><ul>
-<li><a class="reference internal" href="#frameguard.pyspark._enforcement.enforce"><code class="docutils literal notranslate"><span class="pre">enforce()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard-pyspark-enforce">dfguard.pyspark.enforce</a><ul>
+<li><a class="reference internal" href="#dfguard.pyspark._enforcement.enforce"><code class="docutils literal notranslate"><span class="pre">enforce()</span></code></a></li>
 </ul>
 </li>
 </ul>

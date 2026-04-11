@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Exceptions" href="exceptions.html"><link rel="prev" title="Decorators" href="decorators.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Schema History - frameguard 0.1.0</title>
+        <title>Schema History - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="../../index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -194,8 +194,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="schemas.html">Schemas</a></li>
@@ -248,10 +248,10 @@
         <article role="main" id="furo-main-content">
           <section id="schema-history">
 <h1>Schema History<a class="headerlink" href="#schema-history" title="Link to this heading">¶</a></h1>
-<p>When you use <code class="docutils literal notranslate"><span class="pre">fg.dataset(df)</span></code>, every schema-changing operation is
+<p>When you use <code class="docutils literal notranslate"><span class="pre">dfg.dataset(df)</span></code>, every schema-changing operation is
 recorded. <code class="docutils literal notranslate"><span class="pre">schema_history</span></code> gives you the full chain of transforms
 that produced the current DataFrame.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
 
 <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
@@ -260,7 +260,7 @@ that produced the current DataFrame.</p>
     <span class="s2">&quot;order_id LONG, amount DOUBLE, quantity INT, tags ARRAY&lt;STRING&gt;&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">ds</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">dataset</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">dfg</span><span class="o">.</span><span class="n">dataset</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span>
 
@@ -274,25 +274,25 @@ that produced the current DataFrame.</p>
 <p>When <code class="docutils literal notranslate"><span class="pre">validate()</span></code> raises a <code class="docutils literal notranslate"><span class="pre">SchemaValidationError</span></code>, the exception
 includes the full history so you know which step broke the contract.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaHistory">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">frameguard.pyspark.history.</span></span><span class="sig-name descname"><span class="pre">SchemaHistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">changes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaHistory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaHistory" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaHistory">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dfguard.pyspark.history.</span></span><span class="sig-name descname"><span class="pre">SchemaHistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">changes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaHistory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaHistory" title="Link to this definition">¶</a></dt>
 <dd><p>Immutable list of SchemaChanges. Each append returns a new instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>changes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange" title="frameguard.pyspark.history.SchemaChange"><em>SchemaChange</em></a><em>, </em><em>...</em><em>]</em>)</p>
+<dd class="field-odd"><p><strong>changes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange" title="dfguard.pyspark.history.SchemaChange"><em>SchemaChange</em></a><em>, </em><em>...</em><em>]</em>)</p>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaHistory.changes">
-<span class="sig-name descname"><span class="pre">changes</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange" title="frameguard.pyspark.history.SchemaChange"><span class="pre">SchemaChange</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#frameguard.pyspark.history.SchemaHistory.changes" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaHistory.changes">
+<span class="sig-name descname"><span class="pre">changes</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange" title="dfguard.pyspark.history.SchemaChange"><span class="pre">SchemaChange</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#dfguard.pyspark.history.SchemaHistory.changes" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaHistory.initial">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaHistory.initial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaHistory.initial" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaHistory.initial">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaHistory.initial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaHistory.initial" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.history.SchemaHistory" title="frameguard.pyspark.history.SchemaHistory"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaHistory</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.history.SchemaHistory" title="dfguard.pyspark.history.SchemaHistory"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaHistory</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>schema</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>)</p>
@@ -301,26 +301,26 @@ includes the full history so you know which step broke the contract.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaHistory.append">
-<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">change</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaHistory.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaHistory.append" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaHistory.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">change</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaHistory.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaHistory.append" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.history.SchemaHistory" title="frameguard.pyspark.history.SchemaHistory"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaHistory</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.history.SchemaHistory" title="dfguard.pyspark.history.SchemaHistory"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaHistory</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>change</strong> (<a class="reference internal" href="#frameguard.pyspark.history.SchemaChange" title="frameguard.pyspark.history.SchemaChange"><em>SchemaChange</em></a>)</p>
+<dd class="field-even"><p><strong>change</strong> (<a class="reference internal" href="#dfguard.pyspark.history.SchemaChange" title="dfguard.pyspark.history.SchemaChange"><em>SchemaChange</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaHistory.current_schema">
-<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">current_schema</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span><a class="headerlink" href="#frameguard.pyspark.history.SchemaHistory.current_schema" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaHistory.current_schema">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">current_schema</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span><a class="headerlink" href="#dfguard.pyspark.history.SchemaHistory.current_schema" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaHistory.print">
-<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaHistory.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaHistory.print" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaHistory.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaHistory.print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaHistory.print" title="Link to this definition">¶</a></dt>
 <dd><p>Print the schema evolution to stdout.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -332,8 +332,8 @@ includes the full history so you know which step broke the contract.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">frameguard.pyspark.history.</span></span><span class="sig-name descname"><span class="pre">SchemaChange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_after</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropped</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_changed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nullable_changed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaChange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dfguard.pyspark.history.</span></span><span class="sig-name descname"><span class="pre">SchemaChange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_after</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropped</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_changed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nullable_changed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaChange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange" title="Link to this definition">¶</a></dt>
 <dd><p>One step in the schema evolution chain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -348,41 +348,41 @@ includes the full history so you know which step broke the contract.</p>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.operation">
-<span class="sig-name descname"><span class="pre">operation</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.operation" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.operation">
+<span class="sig-name descname"><span class="pre">operation</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.operation" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.schema_after">
-<span class="sig-name descname"><span class="pre">schema_after</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.schema_after" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.schema_after">
+<span class="sig-name descname"><span class="pre">schema_after</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.schema_after" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.added">
-<span class="sig-name descname"><span class="pre">added</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.added" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.added">
+<span class="sig-name descname"><span class="pre">added</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.added" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.dropped">
-<span class="sig-name descname"><span class="pre">dropped</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.dropped" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.dropped">
+<span class="sig-name descname"><span class="pre">dropped</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.dropped" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.type_changed">
-<span class="sig-name descname"><span class="pre">type_changed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.type_changed" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.type_changed">
+<span class="sig-name descname"><span class="pre">type_changed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.type_changed" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.nullable_changed">
-<span class="sig-name descname"><span class="pre">nullable_changed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.nullable_changed" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.nullable_changed">
+<span class="sig-name descname"><span class="pre">nullable_changed</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.nullable_changed" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.initial">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaChange.initial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.initial" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.initial">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaChange.initial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.initial" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange" title="frameguard.pyspark.history.SchemaChange"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaChange</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange" title="dfguard.pyspark.history.SchemaChange"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaChange</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>schema</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>)</p>
@@ -391,13 +391,13 @@ includes the full history so you know which step broke the contract.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.compute">
-<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaChange.compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.compute" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.compute">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaChange.compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.compute" title="Link to this definition">¶</a></dt>
 <dd><p>Diff two StructTypes from Spark and record exactly what changed,
 including nested types.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange" title="frameguard.pyspark.history.SchemaChange"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaChange</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange" title="dfguard.pyspark.history.SchemaChange"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaChange</span></code></a></span></p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
@@ -410,8 +410,8 @@ including nested types.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.has_changes">
-<span class="sig-name descname"><span class="pre">has_changes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaChange.has_changes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.has_changes" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.has_changes">
+<span class="sig-name descname"><span class="pre">has_changes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaChange.has_changes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.has_changes" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
@@ -420,8 +420,8 @@ including nested types.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="frameguard.pyspark.history.SchemaChange.summary">
-<span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/frameguard/pyspark/history.html#SchemaChange.summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#frameguard.pyspark.history.SchemaChange.summary" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="dfguard.pyspark.history.SchemaChange.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dfguard/pyspark/history.html#SchemaChange.summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dfguard.pyspark.history.SchemaChange.summary" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
@@ -489,25 +489,25 @@ including nested types.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Schema History</a><ul>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaHistory"><code class="docutils literal notranslate"><span class="pre">SchemaHistory</span></code></a><ul>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaHistory.changes"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.changes</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaHistory.initial"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.initial()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaHistory.append"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.append()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaHistory.current_schema"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.current_schema</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaHistory.print"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.print()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaHistory"><code class="docutils literal notranslate"><span class="pre">SchemaHistory</span></code></a><ul>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaHistory.changes"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.changes</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaHistory.initial"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.initial()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaHistory.append"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.append()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaHistory.current_schema"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.current_schema</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaHistory.print"><code class="docutils literal notranslate"><span class="pre">SchemaHistory.print()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange"><code class="docutils literal notranslate"><span class="pre">SchemaChange</span></code></a><ul>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.operation"><code class="docutils literal notranslate"><span class="pre">SchemaChange.operation</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.schema_after"><code class="docutils literal notranslate"><span class="pre">SchemaChange.schema_after</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.added"><code class="docutils literal notranslate"><span class="pre">SchemaChange.added</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.dropped"><code class="docutils literal notranslate"><span class="pre">SchemaChange.dropped</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.type_changed"><code class="docutils literal notranslate"><span class="pre">SchemaChange.type_changed</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.nullable_changed"><code class="docutils literal notranslate"><span class="pre">SchemaChange.nullable_changed</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.initial"><code class="docutils literal notranslate"><span class="pre">SchemaChange.initial()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.compute"><code class="docutils literal notranslate"><span class="pre">SchemaChange.compute()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.has_changes"><code class="docutils literal notranslate"><span class="pre">SchemaChange.has_changes()</span></code></a></li>
-<li><a class="reference internal" href="#frameguard.pyspark.history.SchemaChange.summary"><code class="docutils literal notranslate"><span class="pre">SchemaChange.summary()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange"><code class="docutils literal notranslate"><span class="pre">SchemaChange</span></code></a><ul>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.operation"><code class="docutils literal notranslate"><span class="pre">SchemaChange.operation</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.schema_after"><code class="docutils literal notranslate"><span class="pre">SchemaChange.schema_after</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.added"><code class="docutils literal notranslate"><span class="pre">SchemaChange.added</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.dropped"><code class="docutils literal notranslate"><span class="pre">SchemaChange.dropped</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.type_changed"><code class="docutils literal notranslate"><span class="pre">SchemaChange.type_changed</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.nullable_changed"><code class="docutils literal notranslate"><span class="pre">SchemaChange.nullable_changed</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.initial"><code class="docutils literal notranslate"><span class="pre">SchemaChange.initial()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.compute"><code class="docutils literal notranslate"><span class="pre">SchemaChange.compute()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.has_changes"><code class="docutils literal notranslate"><span class="pre">SchemaChange.has_changes()</span></code></a></li>
+<li><a class="reference internal" href="#dfguard.pyspark.history.SchemaChange.summary"><code class="docutils literal notranslate"><span class="pre">SchemaChange.summary()</span></code></a></li>
 </ul>
 </li>
 </ul>

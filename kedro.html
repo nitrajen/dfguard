@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="API Reference" href="api/index.html"><link rel="prev" title="Using frameguard in Airflow" href="airflow.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="API Reference" href="api/index.html"><link rel="prev" title="Using dfguard in Airflow" href="airflow.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Using frameguard in Kedro - frameguard 0.1.0</title>
+        <title>Using dfguard in Kedro - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -194,8 +194,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/pyspark/schemas.html">Schemas</a></li>
@@ -246,15 +246,15 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="using-frameguard-in-kedro">
-<h1>Using frameguard in Kedro<a class="headerlink" href="#using-frameguard-in-kedro" title="Link to this heading">¶</a></h1>
+          <section id="using-dfguard-in-kedro">
+<h1>Using dfguard in Kedro<a class="headerlink" href="#using-dfguard-in-kedro" title="Link to this heading">¶</a></h1>
 <p><a class="reference external" href="https://docs.kedro.org">Kedro</a> is a pipeline framework that structures data
 projects into nodes, pipelines, and a data catalog. A node is a pure Python
 function; Kedro wires inputs and outputs through the catalog.</p>
-<p>frameguard fits naturally into Kedro. Schemas live in the node files alongside
-the functions that use them. <code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> arms the entire
-package from one place, so node functions need no <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> decorator.</p>
-<p>The working example lives at <code class="docutils literal notranslate"><span class="pre">examples/kedro/</span></code> in the frameguard repository.</p>
+<p>dfguard fits naturally into Kedro. Schemas live in the node files alongside
+the functions that use them. <code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> arms the entire
+package from one place, so node functions need no <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> decorator.</p>
+<p>The working example lives at <code class="docutils literal notranslate"><span class="pre">examples/kedro/</span></code> in the dfguard repository.</p>
 <section id="file-structure">
 <h2>File structure<a class="headerlink" href="#file-structure" title="Link to this heading">¶</a></h2>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>kedro/
@@ -270,7 +270,7 @@ package from one place, so node functions need no <code class="docutils literal 
     ├── schemas.py                        # shared SparkSchema definitions
     └── pipelines/processing/
         ├── __init__.py
-        ├── nodes.py                      # node functions with @fg.enforce
+        ├── nodes.py                      # node functions, enforced by dfg.arm()
         └── pipeline.py                   # pipeline assembly
 </pre></div>
 </div>
@@ -281,10 +281,10 @@ package from one place, so node functions need no <code class="docutils literal 
 is the single source of truth for what each stage of the pipeline produces
 and consumes.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># src/orders_pipeline/schemas.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">dfg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">customer_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>      <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
@@ -300,13 +300,13 @@ and consumes.</p>
 <section id="nodes-py">
 <h2>nodes.py<a class="headerlink" href="#nodes-py" title="Link to this heading">¶</a></h2>
 <p>Each node is a plain Python function with a schema-annotated argument.
-No <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> decorator needed; <code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>
+No <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> decorator needed; <code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>
 handles that for the whole package. No validation logic inside the function body.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># src/orders_pipeline/pipelines/processing/nodes.py</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">orders_pipeline.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnrichedOrderSchema</span><span class="p">,</span> <span class="n">RawOrderSchema</span>
 
-<span class="c1"># No @fg.enforce needed; fg.arm() in settings.py covers the whole package.</span>
+<span class="c1"># No @dfg.enforce needed; dfg.arm() in settings.py covers the whole package.</span>
 <span class="c1"># The type annotations on the arguments are the contract.</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich_orders</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">RawOrderSchema</span><span class="p">):</span>
@@ -394,7 +394,7 @@ kedro<span class="w"> </span>run<span class="w"> </span>--node<span class="w"> <
 <h2>What a schema error looks like<a class="headerlink" href="#what-a-schema-error-looks-like" title="Link to this heading">¶</a></h2>
 <p>If the catalog wires <code class="docutils literal notranslate"><span class="pre">raw_orders</span></code> directly into <code class="docutils literal notranslate"><span class="pre">summarise_by_customer</span></code>
 (missing the enrich step), Kedro propagates the node failure with the full
-frameguard message:</p>
+dfguard message:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>TypeError: Schema mismatch in summarise_by_customer() argument &#39;enriched&#39;:
   expected: order_id:bigint, customer_id:bigint, amount:double,
             quantity:int, status:string, revenue:double, is_high_value:boolean
@@ -421,31 +421,31 @@ one file per domain works well:</p>
 </pre></div>
 </div>
 </section>
-<section id="using-fg-enforce-instead-of-fg-arm">
-<h2>Using &#64;fg.enforce instead of fg.arm()<a class="headerlink" href="#using-fg-enforce-instead-of-fg-arm" title="Link to this heading">¶</a></h2>
-<p>If you prefer explicit decoration over package-wide arming, add <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code>
-to individual node functions instead of calling <code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>.
+<section id="using-dfg-enforce-instead-of-dfg-arm">
+<h2>Using &#64;dfg.enforce instead of dfg.arm()<a class="headerlink" href="#using-dfg-enforce-instead-of-dfg-arm" title="Link to this heading">¶</a></h2>
+<p>If you prefer explicit decoration over package-wide arming, add <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code>
+to individual node functions instead of calling <code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>.
 Both approaches work; the choice is style:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># src/orders_pipeline/hooks.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">kedro.framework.hooks</span><span class="w"> </span><span class="kn">import</span> <span class="n">hook_impl</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">FrameguardHook</span><span class="p">:</span>
     <span class="nd">@hook_impl</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">before_pipeline_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_params</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">catalog</span><span class="p">):</span>
-        <span class="n">fg</span><span class="o">.</span><span class="n">arm</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="s2">&quot;orders_pipeline.pipelines&quot;</span><span class="p">)</span>
+        <span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="s2">&quot;orders_pipeline.pipelines&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># src/orders_pipeline/pipelines/processing/nodes.py  (with explicit decoration)</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">orders_pipeline.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnrichedOrderSchema</span><span class="p">,</span> <span class="n">RawOrderSchema</span>
 
-<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">enrich_orders</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">RawOrderSchema</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">raw</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 
-<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">summarise_by_customer</span><span class="p">(</span><span class="n">enriched</span><span class="p">:</span> <span class="n">EnrichedOrderSchema</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">enriched</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;customer_id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
         <span class="n">F</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;total_revenue&quot;</span><span class="p">),</span>
@@ -453,20 +453,8 @@ Both approaches work; the choice is style:</p>
     <span class="p">)</span>
 </pre></div>
 </div>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code></p></td>
-<td><p>One call, whole package covered, no
-decorator on each function</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> per function</p></td>
-<td><p>Explicit, visible at the function, easier
-to reason about in isolation</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>: one call, whole package covered, no decorator on each function.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> per function: explicit, visible at the function, easier to reason about in isolation.</p>
 </section>
 </section>
 
@@ -491,7 +479,7 @@ to reason about in isolation</p></td>
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Using frameguard in Airflow</div>
+                <div class="title">Using dfguard in Airflow</div>
                 
               </div>
             </a>
@@ -525,7 +513,7 @@ to reason about in isolation</p></td>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Using frameguard in Kedro</a><ul>
+<li><a class="reference internal" href="#">Using dfguard in Kedro</a><ul>
 <li><a class="reference internal" href="#file-structure">File structure</a></li>
 <li><a class="reference internal" href="#schemas-py">schemas.py</a></li>
 <li><a class="reference internal" href="#nodes-py">nodes.py</a></li>
@@ -534,7 +522,7 @@ to reason about in isolation</p></td>
 <li><a class="reference internal" href="#running-the-pipeline">Running the pipeline</a></li>
 <li><a class="reference internal" href="#what-a-schema-error-looks-like">What a schema error looks like</a></li>
 <li><a class="reference internal" href="#where-to-define-schemas">Where to define schemas</a></li>
-<li><a class="reference internal" href="#using-fg-enforce-instead-of-fg-arm">Using &#64;fg.enforce instead of fg.arm()</a></li>
+<li><a class="reference internal" href="#using-dfg-enforce-instead-of-dfg-arm">Using &#64;dfg.enforce instead of dfg.arm()</a></li>
 </ul>
 </li>
 </ul>

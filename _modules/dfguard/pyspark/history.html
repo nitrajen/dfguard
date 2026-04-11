@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>frameguard.pyspark.history - frameguard 0.1.0</title>
+        <title>dfguard.pyspark.history - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -160,7 +160,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="../../../index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -181,7 +181,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -193,8 +193,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/pyspark/schemas.html">Schemas</a></li>
@@ -239,7 +239,7 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for frameguard.pyspark.history</h1><div class="highlight"><pre>
+          <h1>Source code for dfguard.pyspark.history</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Immutable schema evolution log. Stores only StructType metadata, never DataFrame data.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
@@ -249,7 +249,7 @@
 
 
 <div class="viewcode-block" id="SchemaChange">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaChange">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaChange">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SchemaChange</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;One step in the schema evolution chain.&quot;&quot;&quot;</span>
@@ -262,14 +262,14 @@
     <span class="n">nullable_changed</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SchemaChange.initial">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaChange.initial">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaChange.initial">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">initial</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemaChange</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">operation</span><span class="o">=</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="n">schema_after</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SchemaChange.compute">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaChange.compute">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaChange.compute">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">before</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">after</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemaChange</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Diff two StructTypes from Spark and record exactly what changed,</span>
@@ -303,13 +303,13 @@
 
 
 <div class="viewcode-block" id="SchemaChange.has_changes">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaChange.has_changes">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaChange.has_changes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_changes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">added</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropped</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_changed</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">nullable_changed</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SchemaChange.summary">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaChange.summary">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaChange.summary">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_changes</span><span class="p">():</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">schema_after</span><span class="o">.</span><span class="n">simpleString</span><span class="p">()</span><span class="si">}</span><span class="s2">  (no schema change)&quot;</span>
@@ -335,7 +335,7 @@
 
 
 <div class="viewcode-block" id="SchemaHistory">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaHistory">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaHistory">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SchemaHistory</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Immutable list of SchemaChanges. Each append returns a new instance.&quot;&quot;&quot;</span>
@@ -343,14 +343,14 @@
     <span class="n">changes</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SchemaChange</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 
 <div class="viewcode-block" id="SchemaHistory.initial">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaHistory.initial">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaHistory.initial">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">initial</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemaHistory</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">changes</span><span class="o">=</span><span class="p">(</span><span class="n">SchemaChange</span><span class="o">.</span><span class="n">initial</span><span class="p">(</span><span class="n">schema</span><span class="p">),))</span></div>
 
 
 <div class="viewcode-block" id="SchemaHistory.append">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaHistory.append">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaHistory.append">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">:</span> <span class="n">SchemaChange</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemaHistory</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SchemaHistory</span><span class="p">(</span><span class="n">changes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">changes</span> <span class="o">+</span> <span class="p">(</span><span class="n">change</span><span class="p">,))</span></div>
 
@@ -360,7 +360,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">changes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">schema_after</span>
 
 <div class="viewcode-block" id="SchemaHistory.print">
-<a class="viewcode-back" href="../../../api/pyspark/history.html#frameguard.pyspark.history.SchemaHistory.print">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/history.html#dfguard.pyspark.history.SchemaHistory.print">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Print the schema evolution to stdout.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;─&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>

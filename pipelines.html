@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Using frameguard in Airflow" href="airflow.html"><link rel="prev" title="Quickstart" href="quickstart.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Using dfguard in Airflow" href="airflow.html"><link rel="prev" title="Quickstart" href="quickstart.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Data Pipeline Usage - frameguard 0.1.0</title>
+        <title>Data Pipeline Usage - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -161,7 +161,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -194,8 +194,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/pyspark/schemas.html">Schemas</a></li>
@@ -248,63 +248,45 @@
         <article role="main" id="furo-main-content">
           <section id="data-pipeline-usage">
 <h1>Data Pipeline Usage<a class="headerlink" href="#data-pipeline-usage" title="Link to this heading">¶</a></h1>
-<p>frameguard works differently depending on your pipeline framework, because
+<p>dfguard works differently depending on your pipeline framework, because
 Kedro and Airflow handle DataFrames differently. This page explains what to
 reach for in each case.</p>
 <section id="quick-reference">
 <h2>Quick reference<a class="headerlink" href="#quick-reference" title="Link to this heading">¶</a></h2>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>What you want</p></th>
-<th class="head"><p>What to use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Enforce one function</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Enforce an entire package from one place</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> (Kedro: see
-<a class="reference internal" href="kedro.html"><span class="doc">Using frameguard in Kedro</span></a>)</p></td>
-</tr>
-<tr class="row-even"><td><p>Validate a DataFrame right after loading</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">MySchema.assert_valid(df)</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>Turn off enforcement in tests or CI</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">fg.disable()</span></code> / <code class="docutils literal notranslate"><span class="pre">fg.enable_enforcement()</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<ul class="simple">
+<li><p><strong>Enforce one function</strong>: <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code></p></li>
+<li><p><strong>Enforce an entire package from one place</strong>: <code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> in <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> (Kedro: see <a class="reference internal" href="kedro.html"><span class="doc">Using dfguard in Kedro</span></a>)</p></li>
+<li><p><strong>Validate a DataFrame right after loading</strong>: <code class="docutils literal notranslate"><span class="pre">MySchema.assert_valid(df)</span></code></p></li>
+<li><p><strong>Turn off enforcement in tests or CI</strong>: <code class="docutils literal notranslate"><span class="pre">dfg.disarm()</span></code></p></li>
+</ul>
 </section>
 <section id="one-thing-to-know-before-you-start">
 <h2>One thing to know before you start<a class="headerlink" href="#one-thing-to-know-before-you-start" title="Link to this heading">¶</a></h2>
 <p>In Kedro, DataFrames come from the catalog at runtime. You cannot call
-<code class="docutils literal notranslate"><span class="pre">fg.schema_of(raw_df)</span></code> at module level because <code class="docutils literal notranslate"><span class="pre">raw_df</span></code> does not exist
-when the module is imported. <strong>Use fg.SparkSchema for all Kedro nodes.</strong></p>
-<p><code class="docutils literal notranslate"><span class="pre">fg.schema_of(df)</span></code> is still useful in scripts and notebooks where you have a
+<code class="docutils literal notranslate"><span class="pre">dfg.schema_of(raw_df)</span></code> at module level because <code class="docutils literal notranslate"><span class="pre">raw_df</span></code> does not exist
+when the module is imported. <strong>Use dfg.SparkSchema for all Kedro nodes.</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">dfg.schema_of(df)</span></code> is still useful in scripts and notebooks where you have a
 live DataFrame in hand.</p>
 </section>
 <hr class="docutils" />
 <section id="kedro">
 <h2>Kedro<a class="headerlink" href="#kedro" title="Link to this heading">¶</a></h2>
 <p><a class="reference external" href="https://docs.kedro.org">Kedro</a> is a pipeline framework that structures projects
-into nodes, pipelines, and a data catalog. See <a class="reference internal" href="kedro.html"><span class="doc">Using frameguard in Kedro</span></a> for a full working
+into nodes, pipelines, and a data catalog. See <a class="reference internal" href="kedro.html"><span class="doc">Using dfguard in Kedro</span></a> for a full working
 example with runnable code.</p>
-<p>The recommended structure is: <code class="docutils literal notranslate"><span class="pre">fg.SparkSchema</span></code> for every node schema, defined
-alongside the functions that use them. <code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> called once in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>
+<p>The recommended structure is: <code class="docutils literal notranslate"><span class="pre">dfg.SparkSchema</span></code> for every node schema, defined
+alongside the functions that use them. <code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> called once in <code class="docutils literal notranslate"><span class="pre">settings.py</span></code>
 wraps every annotated function in the package automatically, so node functions need
-no <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> decorator.</p>
+no <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> decorator.</p>
 <section id="define-schemas-and-nodes">
 <h3>Define schemas and nodes<a class="headerlink" href="#define-schemas-and-nodes" title="Link to this heading">¶</a></h3>
 <p>Schemas live alongside the functions that use them.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/nodes/raw_nodes.py  (enforced by fg.arm() in settings.py)</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/nodes/raw_nodes.py  (enforced by dfg.arm() in settings.py)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">dfg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>      <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
     <span class="n">quantity</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">()</span>
@@ -320,7 +302,7 @@ no <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce<
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/nodes/enrichment_nodes.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">my_pipeline.nodes.raw_nodes</span><span class="w"> </span><span class="kn">import</span> <span class="n">RawOrderSchema</span>
 
@@ -343,11 +325,11 @@ no <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce<
 <p>Kedro loads <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> before any pipeline runs. One call there wraps
 every annotated function in the package. Node files keep their schema
 definitions and type annotations; those are the contract. What they do not
-need is the <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> decorator on each function.</p>
+need is the <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> decorator on each function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_pipeline/settings.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 
-<span class="n">fg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>
+<span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>That single call walks every module in the package, finds every function
@@ -368,14 +350,14 @@ inside wrapped functions are also not touched.</p>
 <span class="c1"># raw_df is missing &#39;revenue&#39;, which EnrichedOrderSchema requires</span>
 <span class="n">flag_high_value</span><span class="p">(</span><span class="n">raw_df</span><span class="p">)</span>
 <span class="c1"># TypeError: Schema mismatch in flag_high_value() argument &#39;df&#39;:</span>
-<span class="c1">#   expected: order_id:long, amount:double, quantity:int, customer_id:long, revenue:double</span>
-<span class="c1">#   received: order_id:long, amount:double, quantity:int, customer_id:long</span>
+<span class="c1">#   expected: order_id:bigint, amount:double, quantity:int, customer_id:bigint, revenue:double</span>
+<span class="c1">#   received: order_id:bigint, amount:double, quantity:int, customer_id:bigint</span>
 
 <span class="c1"># wrong_df has completely different columns</span>
 <span class="n">validate_orders</span><span class="p">(</span><span class="n">wrong_df</span><span class="p">)</span>
 <span class="c1"># TypeError: Schema mismatch in validate_orders() argument &#39;df&#39;:</span>
-<span class="c1">#   expected: order_id:long, amount:double, quantity:int, customer_id:long</span>
-<span class="c1">#   received: user_id:long, name:string</span>
+<span class="c1">#   expected: order_id:bigint, amount:double, quantity:int, customer_id:bigint</span>
+<span class="c1">#   received: user_id:bigint, name:string</span>
 </pre></div>
 </div>
 </section>
@@ -386,22 +368,22 @@ inside wrapped functions are also not touched.</p>
 <p><a class="reference external" href="https://airflow.apache.org">Apache Airflow</a> tasks are Python callables. They
 receive paths or config, create a SparkSession inside, do the work, and write
 the result. DataFrames are never passed between tasks directly; only serializable
-values are. See <a class="reference internal" href="airflow.html"><span class="doc">Using frameguard in Airflow</span></a> for a full working example.</p>
-<p>This means <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on task functions doesn’t buy you much (the args are
+values are. See <a class="reference internal" href="airflow.html"><span class="doc">Using dfguard in Airflow</span></a> for a full working example.</p>
+<p>This means <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> on task functions doesn’t buy you much (the args are
 strings, not DataFrames). The useful tools are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">MySchema.assert_valid(df)</span></code> right after loading, which catches schema drift
 from upstream the moment data enters your task, not halfway through processing</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> on helper functions that the task calls internally</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> on helper functions that the task calls internally</p></li>
 </ul>
 <section id="validate-after-loading">
 <h3>Validate after loading<a class="headerlink" href="#validate-after-loading" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_dag.py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RawOrderSchema</span><span class="p">(</span><span class="n">dfg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>      <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
     <span class="n">quantity</span><span class="p">:</span>    <span class="n">T</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">()</span>
@@ -412,13 +394,13 @@ from upstream the moment data enters your task, not halfway through processing</
     <span class="n">revenue</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
 
 
-<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_revenue</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">RawOrderSchema</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">))</span>
 
 
-<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">flag_vip</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">EnrichedOrderSchema</span><span class="p">):</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;is_vip&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;revenue&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)</span>
@@ -434,8 +416,8 @@ from upstream the moment data enters your task, not halfway through processing</
     <span class="c1"># you find out here, not in a cryptic Spark error three steps later.</span>
     <span class="n">RawOrderSchema</span><span class="o">.</span><span class="n">assert_valid</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
-    <span class="n">enriched</span> <span class="o">=</span> <span class="n">compute_revenue</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>   <span class="c1"># @fg.enforce checks df&#39;s schema here</span>
-    <span class="n">flagged</span>  <span class="o">=</span> <span class="n">flag_vip</span><span class="p">(</span><span class="n">enriched</span><span class="p">)</span>    <span class="c1"># @fg.enforce checks enriched&#39;s schema</span>
+    <span class="n">enriched</span> <span class="o">=</span> <span class="n">compute_revenue</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>   <span class="c1"># @dfg.enforce checks df&#39;s schema here</span>
+    <span class="n">flagged</span>  <span class="o">=</span> <span class="n">flag_vip</span><span class="p">(</span><span class="n">enriched</span><span class="p">)</span>    <span class="c1"># @dfg.enforce checks enriched&#39;s schema</span>
 
     <span class="n">flagged</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="s2">&quot;overwrite&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">output_path</span>
@@ -455,26 +437,26 @@ listing every missing or mismatched field.</p>
 <h2>Global control<a class="headerlink" href="#global-control" title="Link to this heading">¶</a></h2>
 <section id="turn-enforcement-off">
 <h3>Turn enforcement off<a class="headerlink" href="#turn-enforcement-off" title="Link to this heading">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">fg.disable()</span></code> makes every <code class="docutils literal notranslate"><span class="pre">&#64;fg.enforce</span></code> wrapper and every function wrapped by
-<code class="docutils literal notranslate"><span class="pre">fg.arm()</span></code> a straight pass-through. Nothing is checked.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<p><code class="docutils literal notranslate"><span class="pre">dfg.disarm()</span></code> makes every <code class="docutils literal notranslate"><span class="pre">&#64;dfg.enforce</span></code> wrapper and every function wrapped by
+<code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code> a straight pass-through. Nothing is checked.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
 
 <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 <span class="n">wrong_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Alice&quot;</span><span class="p">)],</span> <span class="s2">&quot;user_id LONG, name STRING&quot;</span><span class="p">)</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">fg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderSchema</span><span class="p">(</span><span class="n">dfg</span><span class="o">.</span><span class="n">SparkSchema</span><span class="p">):</span>
     <span class="n">order_id</span><span class="p">:</span> <span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()</span>
     <span class="n">amount</span><span class="p">:</span>   <span class="n">T</span><span class="o">.</span><span class="n">DoubleType</span><span class="p">()</span>
 
-<span class="nd">@fg</span><span class="o">.</span><span class="n">enforce</span>
+<span class="nd">@dfg</span><span class="o">.</span><span class="n">enforce</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">OrderSchema</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">df</span>
 
-<span class="n">fg</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+<span class="n">dfg</span><span class="o">.</span><span class="n">disarm</span><span class="p">()</span>
 <span class="n">process</span><span class="p">(</span><span class="n">wrong_df</span><span class="p">)</span>        <span class="c1"># no error, enforcement is off</span>
 
-<span class="n">fg</span><span class="o">.</span><span class="n">enable_enforcement</span><span class="p">()</span>
+<span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>
 <span class="n">process</span><span class="p">(</span><span class="n">wrong_df</span><span class="p">)</span>        <span class="c1"># raises TypeError again</span>
 </pre></div>
 </div>
@@ -486,15 +468,15 @@ of when or where the functions were imported.</p>
 <p>A clean way to disable enforcement without touching code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># somewhere at startup, e.g. conftest.py or settings.py</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;FRAMEGUARD_DISABLED&quot;</span><span class="p">):</span>
-    <span class="n">fg</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DFGUARD_DISABLED&quot;</span><span class="p">):</span>
+    <span class="n">dfg</span><span class="o">.</span><span class="n">disarm</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Then in CI or non-production environments:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">FRAMEGUARD_DISABLED</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>kedro<span class="w"> </span>run
-<span class="nv">FRAMEGUARD_DISABLED</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>pytest
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">DFGUARD_DISABLED</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>kedro<span class="w"> </span>run
+<span class="nv">DFGUARD_DISABLED</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>pytest
 </pre></div>
 </div>
 </section>
@@ -503,16 +485,16 @@ of when or where the functions were imported.</p>
 <p>If you want most tests to run without schema enforcement (useful when you’re
 testing logic, not schemas), add this to <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">frameguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dfguard.pyspark</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfg</span>
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">no_schema_enforcement</span><span class="p">():</span>
-    <span class="n">fg</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+    <span class="n">dfg</span><span class="o">.</span><span class="n">disarm</span><span class="p">()</span>
     <span class="k">yield</span>
-    <span class="n">fg</span><span class="o">.</span><span class="n">enable_enforcement</span><span class="p">()</span>
+    <span class="n">dfg</span><span class="o">.</span><span class="n">arm</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Tests that specifically test enforcement can call <code class="docutils literal notranslate"><span class="pre">fg.enable_enforcement()</span></code>
+<p>Tests that specifically test enforcement can call <code class="docutils literal notranslate"><span class="pre">dfg.arm()</span></code>
 at the start, or just remove the <code class="docutils literal notranslate"><span class="pre">autouse</span></code> and opt in explicitly.</p>
 </section>
 </section>
@@ -528,7 +510,7 @@ at the start, or just remove the <code class="docutils literal notranslate"><spa
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Using frameguard in Airflow</div>
+                <div class="title">Using dfguard in Airflow</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>

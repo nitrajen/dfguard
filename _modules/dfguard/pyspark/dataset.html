@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>frameguard.pyspark.dataset - frameguard 0.1.0</title>
+        <title>dfguard.pyspark.dataset - dfguard 0.1.0</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -160,7 +160,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">frameguard 0.1.0</div></a>
+      <a href="../../../index.html"><div class="brand">dfguard 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -181,7 +181,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">frameguard 0.1.0</span>
+  <span class="sidebar-brand-text">dfguard 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -193,8 +193,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../pipelines.html">Data Pipeline Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using frameguard in Airflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using frameguard in Kedro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../airflow.html">Using dfguard in Airflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../kedro.html">Using dfguard in Kedro</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/pyspark/index.html">PySpark</a><input aria-label="Toggle navigation of PySpark" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/pyspark/schemas.html">Schemas</a></li>
@@ -239,14 +239,14 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for frameguard.pyspark.dataset</h1><div class="highlight"><pre>
+          <h1>Source code for dfguard.pyspark.dataset</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">frameguard.pyspark.dataset: schema-as-type for PySpark DataFrames.</span>
+<span class="sd">dfguard.pyspark.dataset: schema-as-type for PySpark DataFrames.</span>
 
 <span class="sd">``schema_of(df)`` captures a DataFrame&#39;s schema as a Python class.</span>
 <span class="sd">Use that class as a type annotation and beartype enforces it at every call.</span>
 
-<span class="sd">    from frameguard.pyspark import schema_of, enable</span>
+<span class="sd">    from dfguard.pyspark import schema_of, enable</span>
 <span class="sd">    enable()</span>
 
 <span class="sd">    RawSchema  = schema_of(raw_df)</span>
@@ -260,7 +260,7 @@
 
 <span class="sd">For mutation tracking use ``dataset(df)`` (aliased as ``_make_dataset``):</span>
 
-<span class="sd">    from frameguard.pyspark import dataset</span>
+<span class="sd">    from dfguard.pyspark import dataset</span>
 <span class="sd">    ds = dataset(raw_df)</span>
 <span class="sd">    ds = ds.withColumn(&quot;revenue&quot;, ...)</span>
 <span class="sd">    print(ds.schema_history)</span>
@@ -271,8 +271,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">cast</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaValidationError</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.history</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaChange</span><span class="p">,</span> <span class="n">SchemaHistory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaValidationError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.history</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemaChange</span><span class="p">,</span> <span class="n">SchemaHistory</span>
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1"># Metaclass: enables structural isinstance checks based on schema</span>
@@ -312,7 +312,7 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 <div class="viewcode-block" id="_TypedDatasetBase">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset._TypedDatasetBase">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset._TypedDatasetBase">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">_TypedDatasetBase</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">_TypedDatasetMeta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Internal base shared by all schema type subclasses.</span>
@@ -358,7 +358,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_skip_validation</span><span class="p">:</span>
             <span class="n">expected</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_expected_schema</span>
             <span class="k">if</span> <span class="n">expected</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">_compare_structs</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">_compare_structs</span>
                 <span class="n">errors</span> <span class="o">=</span> <span class="n">_compare_structs</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">SchemaValidationError</span><span class="p">(</span>
@@ -630,7 +630,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StructType</span>
 
-        <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">_compare_structs</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">_compare_structs</span>
 
         <span class="n">s</span> <span class="o">=</span> <span class="n">strict</span> <span class="k">if</span> <span class="n">strict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strict</span>
 
@@ -658,7 +658,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">assert_column_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotation_to_spark</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotation_to_spark</span>
         <span class="n">field</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">fields</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">col_name</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">SchemaValidationError</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_history</span><span class="p">)</span>
@@ -700,7 +700,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span> <span class="k">as</span> <span class="n">SparkDF</span>
 
-        <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">_compare_structs</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">_compare_structs</span>
 
         <span class="n">raw</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">_df</span> <span class="k">if</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__instancecheck__</span><span class="p">(</span><span class="n">_TypedDatasetBase</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span> <span class="k">else</span> <span class="n">df</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">SparkDF</span><span class="p">):</span>
@@ -769,7 +769,7 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 <div class="viewcode-block" id="schema_of">
-<a class="viewcode-back" href="../../../api/pyspark/schemas.html#frameguard.pyspark.dataset.schema_of">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/schemas.html#dfguard.pyspark.dataset.schema_of">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">schema_of</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">_TypedDatasetBase</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Capture a DataFrame&#39;s schema as a Python type class.</span>
@@ -811,7 +811,7 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 <div class="viewcode-block" id="TypedGroupedData">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TypedGroupedData</span><span class="p">:</span>
     <span class="n">_gd</span><span class="p">:</span>     <span class="n">Any</span>
     <span class="n">_parent</span><span class="p">:</span> <span class="n">_TypedDatasetBase</span>
@@ -825,61 +825,61 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">_wrap</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TypedGroupedData.agg">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.agg">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.agg">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">agg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">exprs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="o">*</span><span class="n">exprs</span><span class="p">),</span> <span class="s2">&quot;groupBy(...).agg(...)&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.count">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.count">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.count">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="s2">&quot;groupBy(...).count()&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.mean">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.mean">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.mean">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">cols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">*</span><span class="n">cols</span><span class="p">),</span> <span class="s2">&quot;groupBy(...).mean(...)&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.avg">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.avg">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.avg">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">avg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">cols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">avg</span><span class="p">(</span><span class="o">*</span><span class="n">cols</span><span class="p">),</span> <span class="s2">&quot;groupBy(...).avg(...)&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.sum">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.sum">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.sum">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">cols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">*</span><span class="n">cols</span><span class="p">),</span> <span class="s2">&quot;groupBy(...).sum(...)&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.min">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.min">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.min">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">cols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="o">*</span><span class="n">cols</span><span class="p">),</span> <span class="s2">&quot;groupBy(...).min(...)&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.max">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.max">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.max">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">cols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="o">*</span><span class="n">cols</span><span class="p">),</span> <span class="s2">&quot;groupBy(...).max(...)&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.pivot">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.pivot">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.pivot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">pivot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pivot_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypedGroupedData</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">TypedGroupedData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">pivot_col</span><span class="p">,</span> <span class="n">values</span><span class="p">),</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.apply">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.apply">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.apply">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">udf</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">udf</span><span class="p">),</span> <span class="s2">&quot;groupBy(...).apply(udf)&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TypedGroupedData.applyInPandas">
-<a class="viewcode-back" href="../../../api/pyspark/dataset.html#frameguard.pyspark.dataset.TypedGroupedData.applyInPandas">[docs]</a>
+<a class="viewcode-back" href="../../../api/pyspark/dataset.html#dfguard.pyspark.dataset.TypedGroupedData.applyInPandas">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">applyInPandas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TypedDatasetBase</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_result</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_gd</span><span class="o">.</span><span class="n">applyInPandas</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">schema</span><span class="p">),</span> <span class="s2">&quot;groupBy(...).applyInPandas(...)&quot;</span>
@@ -969,7 +969,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_struct_from_dict</span><span class="p">(</span><span class="n">col_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StructField</span><span class="p">,</span> <span class="n">StructType</span>
 
-    <span class="kn">from</span><span class="w"> </span><span class="nn">frameguard.pyspark.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotation_to_spark</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dfguard.pyspark.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotation_to_spark</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">col_types</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">spark_type</span><span class="p">,</span> <span class="n">nullable</span> <span class="o">=</span> <span class="n">annotation_to_spark</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span>
