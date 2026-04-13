@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.4](https://github.com/nitrajen/dfguard/compare/v0.2.3...v0.2.4) (2026-04-13)
+
+
+### Bug Fixes
+
+* add api/index.rst to toctree to fix docs build and stale GitHub Pages file ([dc5c1ac](https://github.com/nitrajen/dfguard/commit/dc5c1ac93ddd8463552972333e0d6fcd74303a26))
+* add explicit api/index.rst to fix stale GitHub Pages link ([92f89dd](https://github.com/nitrajen/dfguard/commit/92f89dd6a830962dd8ecb8ff5376b27e2ca2eafb))
+* add explicit api/index.rst to overwrite stale GitHub Pages file ([a40c876](https://github.com/nitrajen/dfguard/commit/a40c876c5dbc87c74665978361ea2d88768695d0))
+* restore flat API sidebar, mark api/index.rst as orphan ([97e296d](https://github.com/nitrajen/dfguard/commit/97e296dca65c07af87df6f1a4d16cc08fee07460))
+
+
+### Documentation
+
+* remove misleading empty() note from pandas schema utilities ([efe4595](https://github.com/nitrajen/dfguard/commit/efe4595dbe063fe17f1adecd9048b6cea19162ce))
+
 ## [0.2.3](https://github.com/nitrajen/dfguard/compare/v0.2.2...v0.2.3) (2026-04-13)
 
 
