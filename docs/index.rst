@@ -259,7 +259,11 @@ See the :doc:`quickstart` for the full walkthrough.
    kedro
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: API Reference
 
-   api/index
+   api/schemas
+   api/enforcement
+   api/dataset
+   api/history
+   api/exceptions
