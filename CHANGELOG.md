@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.6](https://github.com/nitrajen/dfguard/compare/v0.2.5...v0.2.6) (2026-04-13)
+
+
+### Bug Fixes
+
+* quote pip install extras and add pyarrow note for pandas ([11666a2](https://github.com/nitrajen/dfguard/commit/11666a2683c0d21aa32e0f97ee6fadaa76a193e1))
+* quote pip install extras, add pyarrow note for pandas ([9b4e4da](https://github.com/nitrajen/dfguard/commit/9b4e4da7cf80481227bc3e79cda2fde139a73307))
+
+
+### Documentation
+
+* move Install section before code examples in README ([96a0887](https://github.com/nitrajen/dfguard/commit/96a08877a540ee9803125b0e20ad4f306d572ba6))
+
 ## [0.2.5](https://github.com/nitrajen/dfguard/compare/v0.2.4...v0.2.5) (2026-04-13)
 
 
