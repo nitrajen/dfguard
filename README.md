@@ -29,6 +29,17 @@ Data pipelines fail late. A DataFrame with the wrong schema enters a function wi
 | pandas  | >= 1.5  | >= 3.10 |
 | Polars  | >= 0.20 | >= 3.10 |
 
+## Install
+
+```bash
+pip install 'dfguard[pyspark]'            # PySpark
+pip install 'dfguard[pandas]' pyarrow    # pandas (pyarrow recommended for nested types)
+pip install 'dfguard[polars]'            # Polars
+pip install 'dfguard[all]'               # all backends
+```
+
+Requires Python >= 3.10. No other mandatory dependencies.
+
 ---
 
 <!-- tabs-start -->
@@ -141,19 +152,6 @@ For package-wide enforcement without decorating each function, call `dfg.arm()` 
 
 ---
 
-## Install
-
-```bash
-pip install dfguard[pyspark]   # PySpark
-pip install dfguard[pandas]    # pandas
-pip install dfguard[polars]    # Polars
-pip install dfguard[all]       # all backends
-```
-
-Requires Python >= 3.10. No other mandatory dependencies.
-
----
-
 ## Two ways to define a schema
 
 ### Capture from a live DataFrame
@@ -224,7 +222,7 @@ class OrderSchema(dfg.PandasSchema):
     zip_code   = Optional[pd.StringDtype()]          # nullable field
 ```
 
-> **pandas + PyArrow**: `pd.ArrowDtype` gives pandas the same nested-type enforcement as PySpark and Polars — arrays, structs, and maps at arbitrary depth. Without PyArrow, pandas dtype enforcement is limited to flat scalar types (`np.dtype`, `pd.StringDtype`, etc.). Install with `pip install dfguard[pandas] pyarrow`.
+> **pandas + PyArrow**: `pd.ArrowDtype` gives pandas the same nested-type enforcement as PySpark and Polars — arrays, structs, and maps at arbitrary depth. Without PyArrow, pandas dtype enforcement is limited to flat scalar types (`np.dtype`, `pd.StringDtype`, etc.). Install with `pip install 'dfguard[pandas]' pyarrow`.
 
 ---
 
