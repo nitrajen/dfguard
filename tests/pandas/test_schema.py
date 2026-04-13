@@ -189,6 +189,90 @@ def test_diff_different_schemas():
     assert "revenue" in result
 
 
+# ── to_dtype_dict and empty: comprehensive dtype coverage ────────────────────
+# One schema that exercises every supported annotation category.
+
+import datetime  # noqa: E402
+
+
+class AllDtypesSchema(PandasSchema):
+    col_int64:     np.dtype("int64")         # numpy dtype instance
+    col_float32:   np.dtype("float32")
+    col_datetime:  np.dtype("datetime64[ns]")
+    col_np_int32:  np.int32                  # numpy scalar type
+    col_string:    pd.StringDtype()          # pandas extension dtype
+    col_int_ext:   pd.Int64Dtype()
+    col_bool_ext:  pd.BooleanDtype()
+    col_int_py:    int                       # Python builtins
+    col_str_py:    str
+    col_list:      list[str]                 # collection types → object
+    col_dt:        datetime.datetime         # datetime builtins
+    col_opt:       Optional[pd.StringDtype()]  # Optional
+
+
+def test_dtype_coverage():
+    """to_dtype_dict and empty() cover every supported annotation category."""
+    d = AllDtypesSchema.to_dtype_dict()
+    assert d["col_int64"]   == np.dtype("int64")
+    assert d["col_float32"] == np.dtype("float32")
+    assert d["col_datetime"] == np.dtype("datetime64[ns]")
+    assert d["col_np_int32"] == np.dtype("int32")
+    assert d["col_string"]  == pd.StringDtype()
+    assert d["col_int_ext"] == pd.Int64Dtype()
+    assert d["col_bool_ext"] == pd.BooleanDtype()
+    assert d["col_int_py"]  == np.dtype("int64")
+    assert d["col_str_py"]  == np.dtype("object")
+    assert d["col_list"]    == np.dtype("object")
+    assert d["col_dt"]      == np.dtype("datetime64[ns]")
+    assert d["col_opt"]     == pd.StringDtype()
+
+    df = AllDtypesSchema.empty()
+    assert len(df) == 0
+    assert df["col_int64"].dtype   == np.dtype("int64")
+    assert df["col_string"].dtype  == pd.StringDtype()
+    assert df["col_int_ext"].dtype == pd.Int64Dtype()
+    assert df["col_list"].dtype    == np.dtype("object")
+    assert isinstance(df, AllDtypesSchema)
+
+
+# ── PyArrow nested types: to_dtype_dict, empty, isinstance ───────────────────
+
+pytest.importorskip("pyarrow")
+
+import pyarrow as pa  # noqa: E402
+
+
+class ArrowNestedSchema(PandasSchema):
+    order_id   = np.dtype("int64")
+    line_items = pd.ArrowDtype(pa.list_(pa.struct([   # list of structs
+        pa.field("sku",   pa.string()),
+        pa.field("price", pa.float64()),
+    ])))
+    address    = pd.ArrowDtype(pa.struct([             # flat struct
+        pa.field("street", pa.string()),
+        pa.field("city",   pa.string()),
+    ]))
+
+
+def test_arrow_nested_dtype_coverage():
+    """to_dtype_dict, empty, and isinstance all work for PyArrow nested columns."""
+    d = ArrowNestedSchema.to_dtype_dict()
+    assert d["line_items"] == pd.ArrowDtype(pa.list_(pa.struct([
+        pa.field("sku",   pa.string()),
+        pa.field("price", pa.float64()),
+    ])))
+    assert d["address"] == pd.ArrowDtype(pa.struct([
+        pa.field("street", pa.string()),
+        pa.field("city",   pa.string()),
+    ]))
+
+    df = ArrowNestedSchema.empty()
+    assert len(df) == 0
+    assert isinstance(df["line_items"].dtype, pd.ArrowDtype)
+    assert isinstance(df["address"].dtype, pd.ArrowDtype)
+    assert isinstance(df, ArrowNestedSchema)
+
+
 # ── bad annotation ────────────────────────────────────────────────────────────
 
 def test_bad_annotation_raises_type_annotation_error():

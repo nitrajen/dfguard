@@ -199,6 +199,30 @@ def test_diff_different():
     assert "revenue" in result
 
 
+# ── nested struct: to_struct, DataFrame creation, and empty ──────────────────
+
+class StructSchema(PolarsSchema):
+    order_id = pl.Int64
+    address  = pl.Struct({"street": pl.String, "city": pl.String})
+
+
+def test_nested_struct_coverage():
+    """to_struct, pl.DataFrame(schema=...), and empty() all work for nested Struct types."""
+    expected = pl.Struct({"street": pl.String, "city": pl.String})
+    assert StructSchema.to_struct()["address"] == expected
+
+    df_data = pl.DataFrame(
+        [{"order_id": 1, "address": {"street": "Main St", "city": "Austin"}}],
+        schema=StructSchema.to_struct(),
+    )
+    assert isinstance(df_data, StructSchema)
+    assert df_data["address"].dtype == pl.Struct({"street": pl.String, "city": pl.String})
+
+    df_empty = StructSchema.empty()
+    assert len(df_empty) == 0
+    assert df_empty["address"].dtype == pl.Struct({"street": pl.String, "city": pl.String})
+
+
 # ── bad annotation ────────────────────────────────────────────────────────────
 
 def test_bad_annotation_raises():
