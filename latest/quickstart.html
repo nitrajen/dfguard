@@ -1188,7 +1188,7 @@ pandas</label><div class="sd-tab-content docutils">
     <span class="n">order_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;int64&quot;</span><span class="p">)</span>
     <span class="n">amount</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
-<span class="c1"># Create an empty DataFrame with the right schema (useful in tests and pipelines)</span>
+<span class="c1"># Create an empty DataFrame with the right schema (useful in tests)</span>
 <span class="n">empty_df</span> <span class="o">=</span> <span class="n">OrderSchema</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
 
 <span class="c1"># Build a schema class from a dtype dict</span>
@@ -1205,13 +1205,6 @@ pandas</label><div class="sd-tab-content docutils">
 <span class="c1">#     order_id = np.dtype(&#39;int64&#39;)</span>
 <span class="c1">#     amount   = np.dtype(&#39;float64&#39;)</span>
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">empty()</span></code> works for all dtype categories: <code class="docutils literal notranslate"><span class="pre">np.dtype</span></code>, pandas extension
-dtypes (<code class="docutils literal notranslate"><span class="pre">pd.StringDtype()</span></code>, <code class="docutils literal notranslate"><span class="pre">pd.Int64Dtype()</span></code>), and <code class="docutils literal notranslate"><span class="pre">pd.ArrowDtype</span></code>
-nested types. For creating a DataFrame with actual data, build it normally
-and validate with <code class="docutils literal notranslate"><span class="pre">OrderSchema.assert_valid(df)</span></code>.</p>
 </div>
 </div>
 <input id="sd-tab-item-32" name="sd-tab-set-10" type="radio">
