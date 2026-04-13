@@ -247,10 +247,16 @@
         <article role="main" id="furo-main-content">
           <section id="dataset">
 <h1>Dataset<a class="headerlink" href="#dataset" title="Link to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">dfg.dataset(df)</span></code> wraps a DataFrame and records every schema-changing
-operation in <code class="docutils literal notranslate"><span class="pre">schema_history</span></code>. The wrapper exposes the same mutation API
-as the underlying library; each method returns a new wrapped instance with
-an updated history entry.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">dataset()</span></code> is an internal utility and is not part of the stable public API.
+It may change or be removed in future releases.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dfg.dataset(df)</span></code> wraps a DataFrame and records schema-changing operations
+in <code class="docutils literal notranslate"><span class="pre">schema_history</span></code>. Schema tracking is limited to a fixed set of explicitly
+wrapped methods listed below. Calling any other method on the wrapper passes
+through to the underlying DataFrame but breaks the tracking chain: the returned
+object is a plain DataFrame, not a tracked dataset.</p>
 <div class="sd-tab-set docutils">
 <input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
 <label class="sd-tab-label" data-sync-group="tab" data-sync-id="pyspark" for="sd-tab-item-0">
@@ -276,11 +282,14 @@ instance, or <code class="docutils literal notranslate"><span class="pre">schema
 </dl>
 </dd></dl>
 
-<p><strong>Available methods:</strong> <code class="docutils literal notranslate"><span class="pre">withColumn</span></code>, <code class="docutils literal notranslate"><span class="pre">withColumns</span></code>, <code class="docutils literal notranslate"><span class="pre">drop</span></code>, <code class="docutils literal notranslate"><span class="pre">select</span></code>,
-<code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">where</span></code>, <code class="docutils literal notranslate"><span class="pre">withColumnRenamed</span></code>, <code class="docutils literal notranslate"><span class="pre">join</span></code>, <code class="docutils literal notranslate"><span class="pre">union</span></code>,
-<code class="docutils literal notranslate"><span class="pre">unionByName</span></code>, <code class="docutils literal notranslate"><span class="pre">groupBy</span></code>, <code class="docutils literal notranslate"><span class="pre">orderBy</span></code>, <code class="docutils literal notranslate"><span class="pre">sort</span></code>, <code class="docutils literal notranslate"><span class="pre">limit</span></code>,
-<code class="docutils literal notranslate"><span class="pre">distinct</span></code>, <code class="docutils literal notranslate"><span class="pre">dropDuplicates</span></code>, <code class="docutils literal notranslate"><span class="pre">coalesce</span></code>, <code class="docutils literal notranslate"><span class="pre">repartition</span></code>,
-<code class="docutils literal notranslate"><span class="pre">cache</span></code>, <code class="docutils literal notranslate"><span class="pre">persist</span></code>, <code class="docutils literal notranslate"><span class="pre">unpersist</span></code>, <code class="docutils literal notranslate"><span class="pre">alias</span></code></p>
+<p><strong>Tracked methods:</strong> <code class="docutils literal notranslate"><span class="pre">withColumn</span></code>, <code class="docutils literal notranslate"><span class="pre">withColumns</span></code>, <code class="docutils literal notranslate"><span class="pre">withColumnRenamed</span></code>,
+<code class="docutils literal notranslate"><span class="pre">withColumnsRenamed</span></code>, <code class="docutils literal notranslate"><span class="pre">withMetadata</span></code>, <code class="docutils literal notranslate"><span class="pre">drop</span></code>, <code class="docutils literal notranslate"><span class="pre">select</span></code>, <code class="docutils literal notranslate"><span class="pre">selectExpr</span></code>,
+<code class="docutils literal notranslate"><span class="pre">toDF</span></code>, <code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">where</span></code>, <code class="docutils literal notranslate"><span class="pre">limit</span></code>, <code class="docutils literal notranslate"><span class="pre">sample</span></code>, <code class="docutils literal notranslate"><span class="pre">distinct</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dropDuplicates</span></code>, <code class="docutils literal notranslate"><span class="pre">orderBy</span></code>, <code class="docutils literal notranslate"><span class="pre">repartition</span></code>, <code class="docutils literal notranslate"><span class="pre">repartitionByRange</span></code>,
+<code class="docutils literal notranslate"><span class="pre">coalesce</span></code>, <code class="docutils literal notranslate"><span class="pre">union</span></code>, <code class="docutils literal notranslate"><span class="pre">unionByName</span></code>, <code class="docutils literal notranslate"><span class="pre">intersect</span></code>, <code class="docutils literal notranslate"><span class="pre">intersectAll</span></code>,
+<code class="docutils literal notranslate"><span class="pre">subtract</span></code>, <code class="docutils literal notranslate"><span class="pre">join</span></code>, <code class="docutils literal notranslate"><span class="pre">crossJoin</span></code>, <code class="docutils literal notranslate"><span class="pre">groupBy</span></code>, <code class="docutils literal notranslate"><span class="pre">rollup</span></code>, <code class="docutils literal notranslate"><span class="pre">cube</span></code>,
+<code class="docutils literal notranslate"><span class="pre">na</span></code>, <code class="docutils literal notranslate"><span class="pre">stat</span></code>, <code class="docutils literal notranslate"><span class="pre">transform</span></code>, <code class="docutils literal notranslate"><span class="pre">unpivot</span></code>, <code class="docutils literal notranslate"><span class="pre">agg</span></code>, <code class="docutils literal notranslate"><span class="pre">count</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>,
+<code class="docutils literal notranslate"><span class="pre">avg</span></code>, <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">pivot</span></code>, <code class="docutils literal notranslate"><span class="pre">apply</span></code>, <code class="docutils literal notranslate"><span class="pre">applyInPandas</span></code></p>
 </div>
 <input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
 <label class="sd-tab-label" data-sync-group="tab" data-sync-id="pandas" for="sd-tab-item-1">
@@ -302,9 +311,11 @@ pandas</label><div class="sd-tab-content docutils">
 </dl>
 </dd></dl>
 
-<p><strong>Available methods:</strong> <code class="docutils literal notranslate"><span class="pre">assign</span></code>, <code class="docutils literal notranslate"><span class="pre">drop</span></code>, <code class="docutils literal notranslate"><span class="pre">rename</span></code>, <code class="docutils literal notranslate"><span class="pre">select</span></code>,
-<code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">merge</span></code>, <code class="docutils literal notranslate"><span class="pre">join</span></code>, <code class="docutils literal notranslate"><span class="pre">groupby</span></code>, <code class="docutils literal notranslate"><span class="pre">sort_values</span></code>,
-<code class="docutils literal notranslate"><span class="pre">drop_duplicates</span></code>, <code class="docutils literal notranslate"><span class="pre">reset_index</span></code>, <code class="docutils literal notranslate"><span class="pre">set_index</span></code></p>
+<p><strong>Tracked methods:</strong> <code class="docutils literal notranslate"><span class="pre">assign</span></code>, <code class="docutils literal notranslate"><span class="pre">rename</span></code>, <code class="docutils literal notranslate"><span class="pre">drop</span></code>, <code class="docutils literal notranslate"><span class="pre">select</span></code>, <code class="docutils literal notranslate"><span class="pre">astype</span></code>,
+<code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">head</span></code>, <code class="docutils literal notranslate"><span class="pre">tail</span></code>, <code class="docutils literal notranslate"><span class="pre">sample</span></code>, <code class="docutils literal notranslate"><span class="pre">drop_duplicates</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sort_values</span></code>, <code class="docutils literal notranslate"><span class="pre">reset_index</span></code>, <code class="docutils literal notranslate"><span class="pre">merge</span></code>, <code class="docutils literal notranslate"><span class="pre">join</span></code>, <code class="docutils literal notranslate"><span class="pre">groupby</span></code>, <code class="docutils literal notranslate"><span class="pre">melt</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pivot_table</span></code>, <code class="docutils literal notranslate"><span class="pre">explode</span></code>, <code class="docutils literal notranslate"><span class="pre">agg</span></code>, <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">count</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>,
+<code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">first</span></code></p>
 </div>
 <input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
 <label class="sd-tab-label" data-sync-group="tab" data-sync-id="polars" for="sd-tab-item-2">
@@ -323,8 +334,8 @@ Polars</label><div class="sd-tab-content docutils">
 </dl>
 </dd></dl>
 
-<p><strong>Available methods:</strong> <code class="docutils literal notranslate"><span class="pre">with_columns</span></code>, <code class="docutils literal notranslate"><span class="pre">drop</span></code>, <code class="docutils literal notranslate"><span class="pre">rename</span></code>, <code class="docutils literal notranslate"><span class="pre">select</span></code>,
-<code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">sort</span></code>, <code class="docutils literal notranslate"><span class="pre">unique</span></code>, <code class="docutils literal notranslate"><span class="pre">join</span></code>, <code class="docutils literal notranslate"><span class="pre">group_by</span></code></p>
+<p><strong>Tracked methods:</strong> <code class="docutils literal notranslate"><span class="pre">with_columns</span></code>, <code class="docutils literal notranslate"><span class="pre">rename</span></code>, <code class="docutils literal notranslate"><span class="pre">drop</span></code>, <code class="docutils literal notranslate"><span class="pre">select</span></code>,
+<code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">sort</span></code>, <code class="docutils literal notranslate"><span class="pre">unique</span></code>, <code class="docutils literal notranslate"><span class="pre">join</span></code>, <code class="docutils literal notranslate"><span class="pre">group_by</span></code>, <code class="docutils literal notranslate"><span class="pre">agg</span></code></p>
 </div>
 </div>
 <section id="schema-history">
@@ -471,7 +482,7 @@ Polars</label><div class="sd-tab-content docutils">
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2026, Nithin Rajendran
+                Copyright &#169; 2026, Nitrajen
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
