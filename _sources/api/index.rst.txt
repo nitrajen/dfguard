@@ -1,7 +1,13 @@
+:orphan:
+
 API Reference
 =============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   pyspark/index
+   schemas
+   enforcement
+   dataset
+   history
+   exceptions
