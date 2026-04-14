@@ -4,8 +4,9 @@ dfguard
 The lightest way to enforce DataFrame schema checks in Python, using type
 annotations. Supports pandas, Polars, and PySpark.
 
-**dfguard moves that failure to the function call.** Enforcement is pure metadata
-inspection: no data scanned, no Spark jobs triggered. Unlike
+**dfguard rejects the wrong DataFrame at the function call** with a precise error:
+which function, which argument, what schema was expected, what arrived.
+Enforcement is pure metadata inspection: no data scanned, no Spark jobs triggered. Unlike
 `pandera <https://pandera.readthedocs.io/en/stable/>`_, which introduces its own
 type system, or `Great Expectations <https://greatexpectations.io/>`_, which scans
 actual data and requires significant setup, dfguard uses the types your library
