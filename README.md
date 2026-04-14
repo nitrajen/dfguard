@@ -2,7 +2,7 @@
 
 # dfguard
 
-**Runtime schema enforcement for Python DataFrames, using the types you already know. One call covers your entire package.**
+**Lightweight runtime schema enforcement for Python DataFrames, using the types you already know.**
 
 [![PyPI](https://img.shields.io/pypi/v/dfguard?color=blue&label=PyPI)](https://pypi.org/project/dfguard/)
 [![Python](https://img.shields.io/pypi/pyversions/dfguard)](https://pypi.org/project/dfguard/)
@@ -19,11 +19,9 @@
 
 Data pipelines fail late. A DataFrame with the wrong schema enters a function without complaint, the job runs, and the crash surfaces somewhere downstream with an error that tells you nothing about where the mismatch started.
 
-**dfguard moves that failure to the function call.** The wrong DataFrame is rejected immediately with a precise error: which function, which argument, what schema was expected, what arrived. Enforcement is pure metadata inspection: dfguard reads the schema struct from your DataFrame, no data is scanned, no Spark jobs triggered.
+**dfguard moves that failure to the function call.** Enforcement is pure metadata inspection: no data scanned, no Spark jobs triggered. Unlike [pandera](https://pandera.readthedocs.io/en/stable/), which introduces its own type system, or [Great Expectations](https://greatexpectations.io/), which scans actual data and requires significant setup, dfguard uses the types your library already ships with, such as `T.LongType()` for PySpark, `pl.Int64` for Polars, or `np.dtype("int64")` for pandas.
 
-Explicitly calling schema validation functions at every stage is not practical. A codebase peppered with validation calls is hard to maintain. dfguard takes a different approach: place one `dfg.arm()` call in your package entry point and every function with a schema-annotated DataFrame argument is enforced automatically, no decorator needed on each function.
-
-Unlike [pandera](https://pandera.readthedocs.io/en/stable/), which introduces its own type system, dfguard uses the types your library already ships with: `T.LongType()` for PySpark, `pl.Int64` for Polars, `np.dtype("int64")` for pandas.
+Explicitly calling validation at every stage peppers your codebase with boilerplate. Place one `dfg.arm()` call in your package entry point and every function with a schema-annotated DataFrame argument is enforced automatically. Use `@dfg.enforce` on individual functions for explicit per-function control. By default, declared columns must be present with correct types and extra columns are fine. Pass `subset=False` to require an exact match.
 
 ## Compatibility
 
