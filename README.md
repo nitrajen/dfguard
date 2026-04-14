@@ -2,7 +2,7 @@
 
 # dfguard
 
-**Lightweight runtime schema enforcement for Python DataFrames. No extra type system, no data scanning.**
+**Runtime schema enforcement for Python DataFrames, using the types you already know. One call covers your entire package.**
 
 [![PyPI](https://img.shields.io/pypi/v/dfguard?color=blue&label=PyPI)](https://pypi.org/project/dfguard/)
 [![Python](https://img.shields.io/pypi/pyversions/dfguard)](https://pypi.org/project/dfguard/)
